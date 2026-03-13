@@ -156,8 +156,8 @@ MonoBehaviour:
       Enabled: 0
       Size: {x: 0.2, y: 0.2}
     HardLimits:
-      Enabled: 0
-      Size: {x: 0.8, y: 0.8}
+      Enabled: 1
+      Size: {x: 0.2, y: 0.2}
       Offset: {x: 0, y: 0}
   CenterOnActivate: 1
   TargetOffset: {x: 0, y: 0.44, z: 0}
@@ -185,7 +185,7 @@ MonoBehaviour:
     AngularDampingMode: 0
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
-  FollowOffset: {x: 0, y: 0.91, z: 0.9}
+  FollowOffset: {x: 0, y: 1, z: 0.9}
 --- !u!114 &40314456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,7 +212,7 @@ MonoBehaviour:
   Lens:
     FieldOfView: 114.60046
     OrthographicSize: 5
-    NearClipPlane: 0.3
+    NearClipPlane: 0.01
     FarClipPlane: 1000
     Dutch: 0
     ModeOverride: 0
@@ -237,8 +237,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 40314453}
   serializedVersion: 2
-  m_LocalRotation: {x: 9.485888e-16, y: 0.97118706, z: -0.23831849, w: 1.6769186e-15}
-  m_LocalPosition: {x: 29.49366, y: 64.32237, z: -15.048776}
+  m_LocalRotation: {x: -0.000000005918325, y: 0.9615242, z: -0.2747203, w: -0.000000020714204}
+  m_LocalPosition: {x: 29.49366, y: 64.41237, z: -15.048776}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -669,7 +669,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.01
   far clip plane: 1000
   field of view: 114.60046
   orthographic: 0
@@ -697,8 +697,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1156449698}
   serializedVersion: 2
-  m_LocalRotation: {x: 3.7708358e-16, y: 0.97118706, z: -0.23831849, w: 1.5366776e-15}
-  m_LocalPosition: {x: 29.49366, y: 64.32237, z: -15.048776}
+  m_LocalRotation: {x: -0.000000005918325, y: 0.9615242, z: -0.2747203, w: -0.000000020714204}
+  m_LocalPosition: {x: 29.49366, y: 64.41237, z: -15.048776}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -969,16 +969,18 @@ MonoBehaviour:
   rb: {fileID: 1893441537}
   col: {fileID: 1893441538}
   smoothTime: 0.2
-  flyforce: 44
-  glideforce: 44
-  pitchSpeed: 100
-  turnSpeed: 100
   maxBankAngle: 100
-  walkSpeed: 4.5
-  jumpForce: 5
+  flyforce: 50
+  FlyVerticalRot: 100
+  FlyHorizontalRot: 100
+  flyingGravity: 2
+  glideforce: 95
+  glideVerticalRot: 50
+  glideHorizontalRot: 80
+  glidingGravity: 15
   groundedGravity: 2
-  flyingGravity: 0.5
-  glidingGravity: 0.2
+  walkSpeed: 2
+  jumpForce: 5
 --- !u!54 &1893441537
 Rigidbody:
   m_ObjectHideFlags: 0

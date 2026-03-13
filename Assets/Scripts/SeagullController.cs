@@ -11,18 +11,21 @@ public class SeagullController : MonoBehaviour
     [Space]
     [Header("Flight Tweaks")]
     [SerializeField] private float smoothTime = 0.2f;
-    [SerializeField] private float flyforce = 10;
-    [SerializeField] private float glideforce = 8;
-    [SerializeField] private float pitchSpeed = 8;
-    [SerializeField] private float turnSpeed = 8;
     [SerializeField] private float maxBankAngle = 8;
-    [Space]
+    [Header("Fly")]
+    [SerializeField] private float flyforce = 50;
+    [SerializeField] private float FlyVerticalRot = 100;
+    [SerializeField] private float FlyHorizontalRot = 100;
+    [SerializeField] private float flyingGravity = 2f;
+    [Header("Glide")]
+    [SerializeField] private float glideforce = 80;
+    [SerializeField] private float glideVerticalRot = 50;
+    [SerializeField] private float glideHorizontalRot = 50;
+    [SerializeField] private float glidingGravity = 15f;
+    [Header("Walk Tweaks")]
+    [SerializeField] private float groundedGravity = 2f;
     [SerializeField] private float walkSpeed = 5f;
     [SerializeField] private float jumpForce = 5f;
-    [Space]
-    [SerializeField] private float groundedGravity = 2f;
-    [SerializeField] private float flyingGravity = 0.5f;
-    [SerializeField] private float glidingGravity = 0.2f;
 
     private InputSystem_Actions controls;
 
@@ -73,23 +76,28 @@ public class SeagullController : MonoBehaviour
         }
         else 
         {
-            float pitch = moveInput.y * pitchSpeed * Time.deltaTime;
-            float yaw = moveInput.x * turnSpeed * Time.deltaTime;
-
-            transform.Rotate(pitch, yaw, 0, Space.Self);
-
             if (isGliding)
             {
+                float pitch = moveInput.y * glideVerticalRot * Time.deltaTime;
+                float yaw = moveInput.x * glideHorizontalRot * Time.deltaTime;
+
+                transform.Rotate(pitch, yaw, 0, Space.Self);
+
                 rb.AddRelativeForce(Vector3.forward * glideforce, ForceMode.Acceleration);
                 rb.AddForce(Vector3.down * glidingGravity, ForceMode.Acceleration);
-                Debug.Log("Flying");
+                Debug.Log("Gliding");
             }
             else if (!isGliding)
             {
+                float pitch = moveInput.y * FlyVerticalRot * Time.deltaTime;
+                float yaw = moveInput.x * FlyHorizontalRot * Time.deltaTime;
+
+                transform.Rotate(pitch, yaw, 0, Space.Self);
+
                 rb.AddRelativeForce(Vector3.forward * flyforce, ForceMode.Acceleration);
                 rb.AddForce(Vector3.down * flyingGravity, ForceMode.Acceleration);
-                anim.SetBool("Gliding", true);
-                Debug.Log("Gliding");
+                anim.SetBool("Flying", false);
+                Debug.Log("Flying");
             }
 
             // Gradually resets the Z-rotation so the gull dont get stuck upside down

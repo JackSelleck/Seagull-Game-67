@@ -26,6 +26,8 @@ public class SeagullController : MonoBehaviour
     [SerializeField] private float groundedGravity = 2f;
     [SerializeField] private float walkSpeed = 5f;
     [SerializeField] private float jumpForce = 5f;
+    [SerializeField] private float groundCheckDistance = 0.3f;
+    [SerializeField] private LayerMask groundLayer;
 
     private InputSystem_Actions controls;
 
@@ -38,24 +40,21 @@ public class SeagullController : MonoBehaviour
     private void Awake()
     {
         controls = new InputSystem_Actions();
-        controls.Player.Move.performed += ctx => Move();
+        //controls.Player.Move.performed += ctx => Move();
         controls.Player.Jump.performed += ctx => OnSpaceButton(ctx);
         controls.Player.Jump.canceled += ctx => StopGliding(ctx);
-    }
-
-    void Start()
-    {
-        
     }
 
     void FixedUpdate()
     {
         ApplyAmbientForces();
-        Vector3 velocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y, rb.linearVelocity.z);
+
+        Vector3 velocity = new(rb.linearVelocity.x, rb.linearVelocity.y, rb.linearVelocity.z);
         anim.SetFloat("Speed", velocity.magnitude);
 
         moveInput = controls.Player.Move.ReadValue<Vector2>();
 
+        // If grounded then walk
         if (isGrounded)
         {
             Vector3 movement = new Vector3(-moveInput.x, 0, -moveInput.y) * walkSpeed;
@@ -74,6 +73,7 @@ public class SeagullController : MonoBehaviour
 
             anim.SetBool("Moving", movement.magnitude > 0.1f);
         }
+        // If not grounded then check if they should flap or glide
         else 
         {
             if (isGliding)
@@ -85,9 +85,10 @@ public class SeagullController : MonoBehaviour
 
                 rb.AddRelativeForce(Vector3.forward * glideforce, ForceMode.Acceleration);
                 rb.AddForce(Vector3.down * glidingGravity, ForceMode.Acceleration);
-                Debug.Log("Gliding");
+                //Debug.Log("Gliding");
             }
-            else if (!isGliding)
+            // If not gliding then they are flying/flapping
+            else
             {
                 float pitch = moveInput.y * FlyVerticalRot * Time.deltaTime;
                 float yaw = moveInput.x * FlyHorizontalRot * Time.deltaTime;
@@ -96,8 +97,8 @@ public class SeagullController : MonoBehaviour
 
                 rb.AddRelativeForce(Vector3.forward * flyforce, ForceMode.Acceleration);
                 rb.AddForce(Vector3.down * flyingGravity, ForceMode.Acceleration);
-                anim.SetBool("Flying", false);
-                Debug.Log("Flying");
+                anim.SetBool("Gliding", false);
+                //Debug.Log("Flying");
             }
 
             // Gradually resets the Z-rotation so the gull dont get stuck upside down
@@ -118,6 +119,7 @@ public class SeagullController : MonoBehaviour
 
     private void ApplyAmbientForces()
     {
+        // Grounded gravity
         if (isGrounded)
         {
             rb.AddForce(Vector3.down * groundedGravity, ForceMode.Acceleration);
@@ -125,16 +127,12 @@ public class SeagullController : MonoBehaviour
         }
     }
 
-    private void Move()
-    {
-
-    }
     private void OnSpaceButton(InputAction.CallbackContext context)
     {
         if (context.interaction is TapInteraction)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            rb.AddRelativeForce(Vector3.forward * flyforce * 2, ForceMode.Acceleration);
+            rb.AddRelativeForce(2 * flyforce * Vector3.forward, ForceMode.Acceleration);
         }
         if (context.interaction is HoldInteraction)
         {
@@ -144,7 +142,7 @@ public class SeagullController : MonoBehaviour
         Debug.Log("Jumped!");
     }
 
-    private void StopGliding(InputAction.CallbackContext context)
+    private void StopGliding(InputAction.CallbackContext _)
     {
         if (isGliding)
         {
@@ -163,6 +161,15 @@ public class SeagullController : MonoBehaviour
     {
         isGrounded = false;
         anim.SetBool("Grounded", false);
+    }
+
+    private bool CheckGrounded()
+    {
+        return Physics.CheckSphere(
+            col.bounds.center - Vector3.up * col.bounds.extents.y,
+            groundCheckDistance,
+            groundLayer
+        );
     }
 
     private void OnEnable()

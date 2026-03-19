@@ -1,71 +1,76 @@
 using UnityEngine;
 using Unity.Cinemachine;
 
-// smoothly clamp upward rotation on cinemachine camera
-public class ClampCamera : CinemachineExtension
+namespace SeagullMovementSystem
 {
-    [SerializeField] private float minPitch = -10f;
-    [SerializeField] private float maxPitch = 60f;
-    [Tooltip("How far from limit easing starts")]
-    [SerializeField] private float easeRange = 15f;
-    [Tooltip("How quickly camera smooths to clamped pitch")]
-    [SerializeField] private float smoothTime = 0.15f;
-
-    private float currentPitch;
-    private float pitchVelocity;
-    private bool initialised = false;
-
-    // overrides the cinemachine camera
-    protected override void PostPipelineStageCallback(
-        CinemachineVirtualCameraBase vcam,
-        CinemachineCore.Stage stage,
-        ref CameraState state,
-        float deltaTime)
+    // smoothly clamp upward rotation on cinemachine camera
+    public class ClampCamera : CinemachineExtension
     {
-        if (stage == CinemachineCore.Stage.Aim)
-        {
-            Vector3 euler = state.RawOrientation.eulerAngles;
-            float rawPitch = euler.x > 180f ? euler.x - 360f : euler.x;
+        [SerializeField] private float _minPitch = -10f;
+        [SerializeField] private float _maxPitch = 60f;
+        [Tooltip("How far from limit easing starts")]
+        [SerializeField] private float _easeRange = 15f;
+        [Tooltip("How quickly camera smooths to clamped pitch")]
+        [SerializeField] private float _smoothTime = 0.15f;
 
-            if (!initialised)
+        private float currentPitch;
+        private float pitchVelocity;
+        private bool initialised = false;
+
+        // overrides the cinemachine camera
+        protected override void PostPipelineStageCallback(
+            CinemachineVirtualCameraBase vcam,
+            CinemachineCore.Stage stage,
+            ref CameraState state,
+            float deltaTime)
+        {
+            if (stage == CinemachineCore.Stage.Aim)
             {
-                currentPitch = rawPitch;
-                initialised = true;
+                Vector3 euler = state.RawOrientation.eulerAngles;
+                float rawPitch = euler.x > 180f ? euler.x - 360f : euler.x;
+
+                if (!initialised)
+                {
+                    currentPitch = rawPitch;
+                    initialised = true;
+                }
+
+                float targetPitch = SoftClamp(rawPitch, _minPitch, _maxPitch, _easeRange);
+
+                currentPitch = Mathf.SmoothDamp(
+                    currentPitch,
+                    targetPitch,
+                    ref pitchVelocity,
+                    _smoothTime,
+                    Mathf.Infinity,
+                    deltaTime
+                );
+
+                state.RawOrientation = Quaternion.Euler(currentPitch, euler.y, euler.z);
+            }
+        }
+
+        // Soften transition to stopping 
+        private float SoftClamp(float value, float min, float max, float range)
+        {
+            // Upward clamp
+            float upperStart = max - range;
+            if (value > upperStart)
+            {
+                float t = Mathf.Clamp01((value - upperStart) / range);
+                t = Mathf.SmoothStep(0f, 1f, t);
+                return Mathf.Lerp(upperStart, max, t);
+            }
+            // Downward clamp
+            float lowerStart = min + range;
+            if (value < lowerStart)
+            {
+                float t = Mathf.Clamp01((lowerStart - value) / range);
+                t = Mathf.SmoothStep(0f, 1f, t);
+                return Mathf.Lerp(lowerStart, min, t);
             }
 
-            float targetPitch = SoftClamp(rawPitch, minPitch, maxPitch, easeRange);
-
-            currentPitch = Mathf.SmoothDamp(
-                currentPitch,
-                targetPitch,
-                ref pitchVelocity,
-                smoothTime,
-                Mathf.Infinity,
-                deltaTime
-            );
-
-            state.RawOrientation = Quaternion.Euler(currentPitch, euler.y, euler.z);
+            return value;
         }
-    }
-
-    private float SoftClamp(float value, float min, float max, float range)
-    {
-        float upperStart = max - range;
-        if (value > upperStart)
-        {
-            float t = Mathf.Clamp01((value - upperStart) / range);
-            t = Mathf.SmoothStep(0f, 1f, t);
-            return Mathf.Lerp(upperStart, max, t);
-        }
-
-        float lowerStart = min + range;
-        if (value < lowerStart)
-        {
-            float t = Mathf.Clamp01((lowerStart - value) / range);
-            t = Mathf.SmoothStep(0f, 1f, t);
-            return Mathf.Lerp(lowerStart, min, t);
-        }
-
-        return value;
     }
 }

@@ -257,10 +257,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dae81d0d7e82d545a714fceb4a4fffb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minPitch: 0
-  maxPitch: 90
-  easeRange: 15
-  smoothTime: 0.15
+  _minPitch: -20
+  _maxPitch: 90
+  _easeRange: 15
+  _smoothTime: 0.15
 --- !u!1001 &90517419
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -979,10 +979,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1acf624e7d0119740b1408bfd065d28e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seagull: {fileID: 1893441535}
-  offset: {x: 0, y: 0, z: 0}
-  rotationSmoothTime: 0.15
-  positionSmoothTime: 0.05
+  _seagull: {fileID: 1893441535}
+  _offset: {x: 0, y: 0, z: 0}
+  _rotationSmoothTime: 0.15
+  _positionSmoothTime: 0.05
 --- !u!4 &1886784988
 Transform:
   m_ObjectHideFlags: 0
@@ -1046,24 +1046,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfac925911207c14e8a65324166ef084, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 1526811019}
-  rb: {fileID: 1893441537}
-  col: {fileID: 1893441538}
-  smoothTime: 0.2
-  maxBankAngle: 100
-  flyforce: 50
-  FlyVerticalRot: 100
-  FlyHorizontalRot: 100
-  flyingGravity: 2
-  glideforce: 80
-  glideVerticalRot: 50
-  glideHorizontalRot: 80
-  glidingGravity: 15
-  groundedGravity: 2
-  walkSpeed: 2
-  jumpForce: 5
-  groundCheckDistance: 0.3
-  groundLayer:
+  _anim: {fileID: 1526811019}
+  _rb: {fileID: 1893441537}
+  _col: {fileID: 1893441538}
+  _smoothTime: 0.2
+  _maxBankAngle: 80
+  _flyforce: 67
+  _flyVerticalRot: 100
+  _flyHorizontalRot: 100
+  _flyingGravity: 2
+  _glideforce: 100
+  _glideVerticalRot: 50
+  _glideHorizontalRot: 50
+  _glidingGravity: 15
+  _groundedGravity: 2
+  _walkSpeed: 3
+  _sprintSpeed: 10
+  _jumpForce: 5
+  _groundCheckDistance: 0.3
+  _groundLayer:
     serializedVersion: 2
     m_Bits: 8
 --- !u!54 &1893441537

@@ -2,182 +2,229 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
 
-public class SeagullController : MonoBehaviour
+namespace SeagullMovementSystem
 {
-    [Header("References")]
-    [SerializeField] private Animator anim;
-    [SerializeField] private Rigidbody rb;
-    [SerializeField] private CapsuleCollider col;
-    [Space]
-    [Header("Flight Tweaks")]
-    [SerializeField] private float smoothTime = 0.2f;
-    [SerializeField] private float maxBankAngle = 8;
-    [Header("Fly")]
-    [SerializeField] private float flyforce = 50;
-    [SerializeField] private float FlyVerticalRot = 100;
-    [SerializeField] private float FlyHorizontalRot = 100;
-    [SerializeField] private float flyingGravity = 2f;
-    [Header("Glide")]
-    [SerializeField] private float glideforce = 80;
-    [SerializeField] private float glideVerticalRot = 50;
-    [SerializeField] private float glideHorizontalRot = 50;
-    [SerializeField] private float glidingGravity = 15f;
-    [Header("Walk Tweaks")]
-    [SerializeField] private float groundedGravity = 2f;
-    [SerializeField] private float walkSpeed = 5f;
-    [SerializeField] private float jumpForce = 5f;
-    [SerializeField] private float groundCheckDistance = 0.3f;
-    [SerializeField] private LayerMask groundLayer;
-
-    private InputSystem_Actions controls;
-
-    private bool isGrounded = true;
-    private bool isGliding = false;
-    private Vector2 moveInput;
-    private Vector3 currentVelocityRef; 
-
-
-    private void Awake()
+    public class SeagullController : MonoBehaviour
     {
-        controls = new InputSystem_Actions();
-        //controls.Player.Move.performed += ctx => Move();
-        controls.Player.Jump.performed += ctx => OnSpaceButton(ctx);
-        controls.Player.Jump.canceled += ctx => StopGliding(ctx);
-    }
+        [Header("References")]
+        [SerializeField] private Animator _anim;
+        [SerializeField] private Rigidbody _rb;
+        [SerializeField] private CapsuleCollider _col;
+        [Space]
+        [Header("Flight Tweaks")]
+        [SerializeField] private float _smoothTime = 0.2f;
+        [SerializeField] private float _maxBankAngle = 8;
+        [Header("Fly")]
+        [SerializeField] private float _flyforce = 50;
+        [SerializeField] private float _flyVerticalRot = 100;
+        [SerializeField] private float _flyHorizontalRot = 100;
+        [SerializeField] private float _flyingGravity = 2f;
+        [Header("Glide")]
+        [SerializeField] private float _glideforce = 80;
+        [SerializeField] private float _glideVerticalRot = 50;
+        [SerializeField] private float _glideHorizontalRot = 50;
+        [SerializeField] private float _glidingGravity = 15f;
+        [Header("Walk Tweaks")]
+        [SerializeField] private float _groundedGravity = 2f;
+        [SerializeField] private float _walkSpeed = 5f;
+        [SerializeField] private float _sprintSpeed = 10f;
+        [SerializeField] private float _jumpForce = 5f;
+        [SerializeField] private float _groundCheckDistance = 0.3f;
+        [SerializeField] private LayerMask _groundLayer;
+    
+        private InputSystem_Actions _controls;
+        private Vector3 _currentVelocityRef;
+        private Vector2 _moveInput;
+        private bool _patrolFlightMode = true;
+        private bool _isSprinting = false;
+        private bool _isGrounded = true;
+        private bool _isGliding = false;
 
-    void FixedUpdate()
-    {
-        ApplyAmbientForces();
-
-        Vector3 velocity = new(rb.linearVelocity.x, rb.linearVelocity.y, rb.linearVelocity.z);
-        anim.SetFloat("Speed", velocity.magnitude);
-
-        moveInput = controls.Player.Move.ReadValue<Vector2>();
-
-        // If grounded then walk
-        if (isGrounded)
+        private void Awake()
         {
-            Vector3 movement = new Vector3(-moveInput.x, 0, -moveInput.y) * walkSpeed;
-
-            rb.linearVelocity = Vector3.SmoothDamp(
-                 rb.linearVelocity,
-                 new Vector3(movement.x, rb.linearVelocity.y, movement.z),
-                 ref currentVelocityRef,
-                 smoothTime
-            );
-            if (movement.magnitude > 0.1f)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(new Vector3(movement.x, 0, movement.z));
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
-            }
-
-            anim.SetBool("Moving", movement.magnitude > 0.1f);
+            _controls = new InputSystem_Actions();
+            _controls.Player.Jump.performed += ctx => OnJumpButton(ctx);
+            _controls.Player.Sprint.performed += ctx => OnSprintButton(ctx);
+            _controls.Player.Sprint.canceled += ctx => OnSprintButtonRelease(ctx);
+            // allow glide whilst space or other jump button held
+            _controls.Player.Jump.canceled += ctx => StopGliding(ctx);
         }
-        // If not grounded then check if they should flap or glide
-        else 
+    
+        void FixedUpdate()
         {
-            if (isGliding)
+            ApplyAmbientForces();
+    
+            if (_patrolFlightMode)
             {
-                float pitch = moveInput.y * glideVerticalRot * Time.deltaTime;
-                float yaw = moveInput.x * glideHorizontalRot * Time.deltaTime;
-
-                transform.Rotate(pitch, yaw, 0, Space.Self);
-
-                rb.AddRelativeForce(Vector3.forward * glideforce, ForceMode.Acceleration);
-                rb.AddForce(Vector3.down * glidingGravity, ForceMode.Acceleration);
-                //Debug.Log("Gliding");
+                PatrolFlightMode();
             }
-            // If not gliding then they are flying/flapping
+            else { PrecisionFlightMode();}
+
+            if (_moveInput == Vector2.zero)
+            {
+                _anim.SetBool("Idle", true);
+            }
+            else {_anim.SetBool("Idle", false);}
+        }
+
+        #region Flight
+        private void PatrolFlightMode()
+        {
+            Vector3 velocity = new(_rb.linearVelocity.x, _rb.linearVelocity.y, _rb.linearVelocity.z);
+            _anim.SetFloat("Speed", velocity.magnitude);
+
+            _moveInput = _controls.Player.Move.ReadValue<Vector2>();
+
+            // If grounded then walk
+            if (_isGrounded)
+            {
+                Vector3 movement;
+
+                if (_isSprinting)
+                {
+                    movement = new Vector3(-_moveInput.x, 0, -_moveInput.y) * _sprintSpeed;
+                }
+                else
+                {
+                    movement = new Vector3(-_moveInput.x, 0, -_moveInput.y) * _walkSpeed;
+                }
+
+                _rb.linearVelocity = Vector3.SmoothDamp(
+                         _rb.linearVelocity,
+                         new Vector3(movement.x, _rb.linearVelocity.y, movement.z),
+                         ref _currentVelocityRef,
+                         _smoothTime
+                    );
+                if (movement.magnitude > 0.1f)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(new Vector3(movement.x, 0, movement.z));
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+                }
+
+                _anim.SetBool("Moving", movement.magnitude > 0.1f);
+            }
+            // If not grounded then check if they should flap or glide
             else
             {
-                float pitch = moveInput.y * FlyVerticalRot * Time.deltaTime;
-                float yaw = moveInput.x * FlyHorizontalRot * Time.deltaTime;
+                if (_isGliding)
+                {
+                    float pitch = _moveInput.y * _glideVerticalRot * Time.deltaTime;
+                    float yaw = _moveInput.x * _glideHorizontalRot * Time.deltaTime;
 
-                transform.Rotate(pitch, yaw, 0, Space.Self);
+                    transform.Rotate(pitch, yaw, 0, Space.Self);
 
-                rb.AddRelativeForce(Vector3.forward * flyforce, ForceMode.Acceleration);
-                rb.AddForce(Vector3.down * flyingGravity, ForceMode.Acceleration);
-                anim.SetBool("Gliding", false);
-                //Debug.Log("Flying");
+                    _rb.AddRelativeForce(Vector3.forward * _glideforce, ForceMode.Acceleration);
+                    _rb.AddForce(Vector3.down * _glidingGravity, ForceMode.Acceleration);
+                    //Debug.Log("Gliding");
+                }
+                // If not gliding then they are flying/flapping
+                else
+                {
+                    float pitch = _moveInput.y * _flyVerticalRot * Time.deltaTime;
+                    float yaw = _moveInput.x * _flyHorizontalRot * Time.deltaTime;
+
+                    transform.Rotate(pitch, yaw, 0, Space.Self);
+
+                    _rb.AddRelativeForce(Vector3.forward * _flyforce, ForceMode.Acceleration);
+                    _rb.AddForce(Vector3.down * _flyingGravity, ForceMode.Acceleration);
+                    _anim.SetBool("Gliding", false);
+                    //Debug.Log("Flying");
+                }
+
+                // Gradually resets the Z-rotation so the gull dont get stuck upside down
+                float rollAngle = -_moveInput.x * _maxBankAngle; // how far the gull should visually rotate
+                Quaternion targetRotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, rollAngle);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 2f);
             }
-
-            // Gradually resets the Z-rotation so the gull dont get stuck upside down
-            float rollAngle = -moveInput.x * maxBankAngle; // Visual banking
-            Quaternion targetRotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, rollAngle);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 2f);
-
-            rb.constraints = RigidbodyConstraints.None; 
-            rb.linearDamping = 4f;       
         }
-
-        if (moveInput == Vector2.zero)
+        /// <summary>
+        /// Precision mode:
+        /// Easier to control than the patrol flight mode, as to make stealing more feasible
+        /// Should not allow you to touch the ground unless you crash into something
+        /// Should have a dive move with a bit of an aim assist
+        /// </summary>
+        private void PrecisionFlightMode()
         {
-            anim.SetBool("Idle", true);
-        }
-        else {anim.SetBool("Idle", false);}
-    }
 
-    private void ApplyAmbientForces()
-    {
-        // Grounded gravity
-        if (isGrounded)
+
+            Debug.Log("EnteredPrecisionFlightMode");
+        }
+        #endregion
+
+        private void ApplyAmbientForces()
         {
-            rb.AddForce(Vector3.down * groundedGravity, ForceMode.Acceleration);
-            Debug.Log("Grounded");
+            // Grounded gravity
+            if (_isGrounded)
+            {
+                _rb.AddForce(Vector3.down * _groundedGravity, ForceMode.Acceleration);
+                Debug.Log("Grounded");
+            }
         }
-    }
 
-    private void OnSpaceButton(InputAction.CallbackContext context)
-    {
-        if (context.interaction is TapInteraction)
+        #region On Button Checks
+        private void OnJumpButton(InputAction.CallbackContext context)
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            rb.AddRelativeForce(2 * flyforce * Vector3.forward, ForceMode.Acceleration);
+            if (context.interaction is TapInteraction)
+            {
+                _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
+                _rb.AddRelativeForce(2 * _flyforce * Vector3.forward, ForceMode.Acceleration);
+            }
+            if (context.interaction is HoldInteraction)
+            {
+                _isGliding = true;
+                _anim.SetBool("Glide", true);
+            }
+            Debug.Log("Jumped!");
         }
-        if (context.interaction is HoldInteraction)
+        private void OnSprintButton(InputAction.CallbackContext context)
         {
-            isGliding = true;
-            anim.SetBool("Glide", true);
+            _isSprinting = true;
+            _anim.SetBool("SprintButton", true);
         }
-        Debug.Log("Jumped!");
-    }
-
-    private void StopGliding(InputAction.CallbackContext _)
-    {
-        if (isGliding)
+        private void OnSprintButtonRelease(InputAction.CallbackContext context)
         {
-            isGliding = false;
-            anim.SetBool("Glide", false);
-            Debug.Log("Space Released: GLIDE STOOOOOOOOOOP!");
+            _isSprinting = false;
+            _anim.SetBool("SprintButton", false);
         }
-    }
+        private void StopGliding(InputAction.CallbackContext _)
+        {
+            if (_isGliding)
+            {
+                _isGliding = false;
+                _anim.SetBool("Glide", false);
+                Debug.Log("Space Released: GLIDE STOOOOOOOOOOP!");
+            }
+        }
+        #endregion
 
-    private void OnTriggerEnter(Collider other)
-    {
-        isGrounded = true;
-        anim.SetBool("Grounded", true);
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        isGrounded = false;
-        anim.SetBool("Grounded", false);
-    }
+        #region Ground Detection
+        private bool CheckGrounded()
+        {
+            return Physics.CheckSphere(
+                _col.bounds.center - Vector3.up * _col.bounds.extents.y,
+                _groundCheckDistance,
+                _groundLayer
+            );
+        }
+        private void OnTriggerEnter(Collider other)
+        {
+            _isGrounded = true;
+            _anim.SetBool("Grounded", true);
+        }
+        private void OnTriggerExit(Collider other)
+        {
+            _isGrounded = false;
+            _anim.SetBool("Grounded", false);
+        }
+        #endregion
 
-    private bool CheckGrounded()
-    {
-        return Physics.CheckSphere(
-            col.bounds.center - Vector3.up * col.bounds.extents.y,
-            groundCheckDistance,
-            groundLayer
-        );
-    }
-
-    private void OnEnable()
-    {
-        controls.Enable();
-    }
-    private void OnDisable()
-    {
-        controls.Disable();
+        private void OnEnable()
+        {
+            _controls.Enable();
+        }
+        private void OnDisable()
+        {
+            _controls.Disable();
+        }
     }
 }

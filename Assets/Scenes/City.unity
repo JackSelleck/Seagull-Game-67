@@ -10710,6 +10710,10 @@ PrefabInstance:
       value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 102150, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 102150, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -17467,9 +17471,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 102146, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1576846586}
-    - targetCorrespondingSourceObject: {fileID: 102150, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 681197303}
     - targetCorrespondingSourceObject: {fileID: 100768, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
       insertIndex: -1
       addedObject: {fileID: 685519516}
@@ -30801,7 +30802,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!114 &273184565
 MonoBehaviour:
@@ -35939,7 +35940,7 @@ MonoBehaviour:
   _layerName: 
   _layer: 4
   _overrideGravity: 1
-  _gravity: -9.8
+  _gravity: 1
   _gravityMultiplier: 0.1
   _waterBodyCulling: 1
   _minScale: 8
@@ -35989,7 +35990,7 @@ Transform:
   m_GameObject: {fileID: 395791048}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.995231, y: -0.39, z: -33.51659}
+  m_LocalPosition: {x: 0, y: -2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -46631,33 +46632,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4302700, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
---- !u!1 &681197295 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 102150, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
-  m_PrefabInstance: {fileID: 154441154}
-  m_PrefabAsset: {fileID: 0}
---- !u!64 &681197303
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 681197295}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300004, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
 --- !u!1 &681864030 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 103944, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
@@ -92950,6 +92924,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 25860529c4337d24c8688895b9f0b5ec, type: 3}
       propertyPath: m_Name
       value: citydoom
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 25860529c4337d24c8688895b9f0b5ec, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 25860529c4337d24c8688895b9f0b5ec, type: 3}
       propertyPath: m_LocalScale.x

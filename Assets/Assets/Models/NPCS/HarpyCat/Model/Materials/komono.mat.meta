@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 29c3617d4ea0a92429c38ee3a9dbd487
+timeCreated: 1529300664
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121122
+  packageName: HarpyCat
+  packageVersion: 1.0
+  assetPath: Assets/HarpyCat/Model/Materials/komono.mat
+  uploadId: 253634

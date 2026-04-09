@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 572c598be810edd4197488bfecefbc30
+timeCreated: 1529300664
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121122
+  packageName: HarpyCat
+  packageVersion: 1.0
+  assetPath: Assets/HarpyCat/Model/Materials/eye_hoshi.mat
+  uploadId: 253634

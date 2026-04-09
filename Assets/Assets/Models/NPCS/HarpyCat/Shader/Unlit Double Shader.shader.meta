@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 70e3884a73515df4fba921a37659a76f
+timeCreated: 1529402392
+licenseType: Store
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121122
+  packageName: HarpyCat
+  packageVersion: 1.0
+  assetPath: Assets/HarpyCat/Shader/Unlit Double Shader.shader
+  uploadId: 253634

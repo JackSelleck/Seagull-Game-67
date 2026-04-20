@@ -4,7 +4,7 @@ public class Resolution : MonoBehaviour
 {
     void Start()
     {
-        ApplyResolution();
+
     }
 
     void ApplyResolution()

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FPSCounter : MonoBehaviour
 {
-    public static FPSCounter fpsCounter { get; private set; }
+    public static FPSCounter FpsCounter { get; private set; }
 
     private float deltaTime = 0f;
 
@@ -15,8 +15,10 @@ public class FPSCounter : MonoBehaviour
     {
         int fps = Mathf.CeilToInt(1f / deltaTime);
 
-        GUIStyle style = new GUIStyle();
-        style.fontSize = 24;
+        GUIStyle style = new GUIStyle
+        {
+            fontSize = 24
+        };
         style.normal.textColor = Color.white;
 
         GUI.Label(new Rect(10, 10, 200, 50), "FPS: " + fps, style);

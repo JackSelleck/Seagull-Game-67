@@ -6,32 +6,13 @@ namespace Scripts.Player
     [DisallowMultipleComponent]
     public class SeagullController : MonoBehaviour
     {
-        public PlayerInputManager Inputs;
-
         [Header("References")]
+        [SerializeField] private PlayerInputManager Inputs;
+        [SerializeField] private PlayerStats _playerStats;
         [SerializeField] private Animator _anim;
         [SerializeField] private Rigidbody _rb;
         [SerializeField] private CapsuleCollider _col;
         [SerializeField] private Transform _cam;
-        [Space]
-        [Header("Flight Tweaks")]
-        [SerializeField] private float _smoothTime = 0.2f;
-        [SerializeField] private float _maxBankAngle = 80;
-        [Header("Fly")]
-        [SerializeField] private float _flyForce = 10;
-        [SerializeField] private float _flyVerticalRot = 100;
-        [SerializeField] private float _flyHorizontalRot = 100;
-        [SerializeField] private float _flyingGravity = 2;
-        [Header("Glide")]
-        [SerializeField] private float _glideForce = 15;
-        [SerializeField] private float _glideVerticalRot = 50;
-        [SerializeField] private float _glideHorizontalRot = 50;
-        [SerializeField] private float _glidingGravity = 6;
-        [Header("Walk Tweaks")]
-        [SerializeField] private float _groundedGravity = 7;
-        [SerializeField] private float _walkSpeed = 1.67f;
-        [SerializeField] private float _sprintSpeed = 2;
-        [SerializeField] private float _jumpForce = 1;
     
         private Vector3 _currentVelocityRef;
         private Vector2 _moveInput;
@@ -43,28 +24,20 @@ namespace Scripts.Player
         {
             _moveInput = Inputs.GetMovementDirection();
 
-            switch (_isGrounded)
+            if (_isGrounded)
             {
-                case true:
-                    WalkMovementMode();
-                        break;
-
-                case false:
-                    FlightMovementMode();
-                    break;
-            };
+                WalkMovementMode();
+            }
+            else
+            {
+                FlightMovementMode();
+            }
 
             if (Inputs.GetJumpDown())
                 Jump();
-            if (Inputs.GetJumpHeld())
-                Glide(); 
-            else if (_isGliding)
-                StopGliding();
 
-            if (Inputs.GetSprintHeld())
-                Sprint();
-            else if (_isSprinting)
-                StopSprinting();
+            SetSimpleState(ref _isGliding, "Glide", Inputs.GetJumpHeld());
+            SetSimpleState(ref _isSprinting, "SprintButton", Inputs.GetSprintHeld());
 
             _anim.SetBool("Idle", _moveInput == Vector2.zero);
         }
@@ -73,9 +46,9 @@ namespace Scripts.Player
         private void WalkMovementMode()
         {
             // gravity
-            _rb.AddForce(Vector3.down * _groundedGravity, ForceMode.Acceleration); 
+            _rb.AddForce(Vector3.down * _playerStats.groundedGravity, ForceMode.Acceleration); 
 
-            float speed = _isSprinting ? _sprintSpeed : _walkSpeed;
+            float speed = _isSprinting ? _playerStats.sprintSpeed : _playerStats.walkSpeed;
 
             Vector3 movement = Inputs.GetMovementCameraDirection() * speed;
 
@@ -83,7 +56,7 @@ namespace Scripts.Player
                 _rb.linearVelocity,
                 new Vector3(movement.x, _rb.linearVelocity.y, movement.z),
                 ref _currentVelocityRef,
-                _smoothTime
+                _playerStats.smoothTime
             );
 
             // Rotate seagull to face movement direction
@@ -96,35 +69,26 @@ namespace Scripts.Player
 
             _anim.SetBool("Moving", movement.magnitude > 0.1f);
         }
+
         private void FlightMovementMode()
         {
-            Vector3 velocity = new(_rb.linearVelocity.x, _rb.linearVelocity.y, _rb.linearVelocity.z);
-            _anim.SetFloat("Speed", velocity.magnitude);
+            // Get correct flight value based on if in flap or glide mode
+            float verticalRot = _isGliding ? _playerStats.glideModeVerticalRot : _playerStats.flapModeVerticalRot;
+            float horizontalRot = _isGliding ? _playerStats.glideModeHorizontalRot : _playerStats.flapModeHorizontalRot;
+            float moveForce = _isGliding ? _playerStats.glideModeForce : _playerStats.flapModeForce;
+            float gravity = _isGliding ? _playerStats.glidingModeGravity : _playerStats.flapModeGravity;
 
-            if (_isGliding)
-            {
-                float pitch = _moveInput.y * _glideVerticalRot * Time.deltaTime;
-                float yaw = _moveInput.x * _glideHorizontalRot * Time.deltaTime;
+            float pitch = _moveInput.y * verticalRot * Time.deltaTime;
+            float yaw = _moveInput.x * horizontalRot * Time.deltaTime;
 
-                transform.Rotate(pitch, yaw, 0, Space.Self);
+            transform.Rotate(pitch, yaw, 0, Space.Self);
+            _rb.AddRelativeForce(Vector3.forward * moveForce, ForceMode.Acceleration);
+            _rb.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
 
-                _rb.AddRelativeForce(Vector3.forward * _glideForce, ForceMode.Acceleration); // Fly force
-                _rb.AddForce(Vector3.down * _glidingGravity, ForceMode.Acceleration); // gravity
-            }
-            // If not gliding then they are flying/flapping
-            else
-            {
-                float pitch = _moveInput.y * _flyVerticalRot * Time.deltaTime;
-                float yaw = _moveInput.x * _flyHorizontalRot * Time.deltaTime;
-
-                transform.Rotate(pitch, yaw, 0, Space.Self);
-
-                _rb.AddRelativeForce(Vector3.forward * _flyForce, ForceMode.Acceleration); // Fly force
-                _rb.AddForce(Vector3.down * _flyingGravity, ForceMode.Acceleration); // gravity
-            }
+            _anim.SetFloat("Speed", _rb.linearVelocity.magnitude);
 
             // Gradually resets the Z-rotation so the gull doesnt get stuck upside down or to the side
-            float rollAngle = -_moveInput.x * _maxBankAngle; // how far the gull should rotate
+            float rollAngle = -_moveInput.x * _playerStats.maxBankAngle; // how far the gull should rotate
             Quaternion targetRotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, rollAngle);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 2f);       
         }
@@ -135,32 +99,18 @@ namespace Scripts.Player
         {
             if (_isGrounded)
             {
-                _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
-                _rb.AddRelativeForce(2 * _flyForce * Vector3.forward, ForceMode.Acceleration);
+                _rb.AddForce(Vector3.up * _playerStats.jumpForce, ForceMode.Impulse);
+                _rb.AddRelativeForce(2 * _playerStats.flapModeForce * Vector3.forward, ForceMode.Acceleration);
             }
         }
-        private void Glide()
+        // Helper to change states that are just a bool and animation change
+        private void SetSimpleState(ref bool current, string animParam, bool desired)
         {
-            _isGliding = true;
-            _anim.SetBool("Glide", true);     
-        }
-        private void StopGliding()
-        {
-            if (_isGliding)
-            {
-                _isGliding = false;
-                _anim.SetBool("Glide", false);
-            }
-        }
-        private void Sprint()
-        {
-            _isSprinting = true;
-            _anim.SetBool("SprintButton", true);
-        }
-        private void StopSprinting()
-        {
-            _isSprinting = false;
-            _anim.SetBool("SprintButton", false);
+            // If bool being passed matches what its supposed to be then return
+            if (current == desired) return;
+            // Otherwise update state to match
+            current = desired;
+            _anim.SetBool(animParam, desired);
         }
         #endregion
 
@@ -183,16 +133,5 @@ namespace Scripts.Player
             }
         }
         #endregion
-
-        /// <summary>
-        /// Precision mode:
-        /// Easier to control than the patrol flight mode, as to make stealing more feasible
-        /// Should not allow you to touch the ground unless you crash into something
-        /// Should have a dive move with a bit of an aim assist
-        /// </summary>
-        private void PrecisionFlightMode()
-        {
-            Debug.Log("EnteredPrecisionFlightMode");
-        }
     }
 }

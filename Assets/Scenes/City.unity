@@ -23203,6 +23203,21 @@ PrefabInstance:
     - {fileID: 102304, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
     - {fileID: 105268, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
     - {fileID: 102412, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
+    - {fileID: 102348, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
+    - {fileID: 102302, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
+    - {fileID: 105244, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
+    - {fileID: 105238, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
+    - {fileID: 105234, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
+    - {fileID: 105228, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
+    - {fileID: 105224, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
+    - {fileID: 105222, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
+    - {fileID: 105232, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
+    - {fileID: 104812, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
+    - {fileID: 105236, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
+    - {fileID: 105054, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
+    - {fileID: 105052, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
+    - {fileID: 102446, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
+    - {fileID: 102384, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 402160, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
       insertIndex: 51
@@ -38830,6 +38845,10 @@ PrefabInstance:
       propertyPath: _glideforce
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: 80593004653874709, guid: a59c304ff0450d842a3d4b43443cfc14, type: 3}
+      propertyPath: _playerStats
+      value: 
+      objectReference: {fileID: 11400000, guid: 5f123821209ee604a99c80e6332cd25b, type: 2}
     - target: {fileID: 80593004653874709, guid: a59c304ff0450d842a3d4b43443cfc14, type: 3}
       propertyPath: _sprintSpeed
       value: 2.67

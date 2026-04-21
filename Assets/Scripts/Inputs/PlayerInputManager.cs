@@ -33,10 +33,6 @@ namespace Scripts.Inputs
         private InputAction _trackedDevicePosition;
         private InputAction _trackedDeviceOrientation;
 
-        // Set the actions list to this if you want the player to make no inputs
-        readonly private List<string> NoMovement = new()
-        { };
-
         readonly private List<string> UIActions = new()
         {
            "Navigate", "Submit", "Cancel", "Point",
@@ -164,10 +160,7 @@ namespace Scripts.Inputs
             {
                 foreach (var action in actions)
                 {
-                    if (NoMovement.Contains(action.name))
-                        action.Enable();
-                    else
-                        action.Disable();
+                   action.Disable();
                 }
             }
             else

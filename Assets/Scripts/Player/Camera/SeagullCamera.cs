@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SeagullMovementSystem
+namespace Scripts.Player.Camera
 {
     public class SeagullCamera : MonoBehaviour
     {

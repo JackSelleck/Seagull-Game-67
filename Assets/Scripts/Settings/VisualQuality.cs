@@ -1,24 +1,28 @@
 using UnityEngine;
 
-public class VisualQuality : MonoBehaviour
+namespace Scripts.Settings
 {
-    [SerializeField] private Material highSpecSkybox;
-    [SerializeField] private Camera _camera;
-    [SerializeField] private bool lowerRenderDistance = false;
-
-    void Start()
+    [DisallowMultipleComponent]
+    public class VisualQuality : MonoBehaviour
     {
-        if (lowerRenderDistance)
+        [SerializeField] private Material highSpecSkybox;
+        [SerializeField] private Camera _camera;
+        [SerializeField] private bool lowerRenderDistance = false;
+    
+        void Start()
         {
-            RenderSettings.skybox = null;
-            RenderSettings.fog = true;
-            _camera.farClipPlane = 25;
-        }
-        else
-        {
-            RenderSettings.skybox = highSpecSkybox;
-            RenderSettings.fog = false;
-            _camera.farClipPlane = 100;
+            if (lowerRenderDistance)
+            {
+                RenderSettings.skybox = null;
+                RenderSettings.fog = true;
+                _camera.farClipPlane = 25;
+            }
+            else
+            {
+                RenderSettings.skybox = highSpecSkybox;
+                RenderSettings.fog = false;
+                _camera.farClipPlane = 100;
+            }
         }
     }
 }

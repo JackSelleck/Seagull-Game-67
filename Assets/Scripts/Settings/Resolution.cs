@@ -1,14 +1,18 @@
 using UnityEngine;
 
-public class Resolution : MonoBehaviour
+namespace Scripts.Settings
 {
-    void Start()
+    [DisallowMultipleComponent]
+    public class Resolution : MonoBehaviour
     {
+        void Start()
+        {
 
-    }
+        }
 
-    void ApplyResolution()
-    {
-        Screen.SetResolution(1280, 720, Screen.fullScreen);
+        void ApplyResolution()
+        {
+            Screen.SetResolution(1280, 720, Screen.fullScreen);
+        }
     }
 }

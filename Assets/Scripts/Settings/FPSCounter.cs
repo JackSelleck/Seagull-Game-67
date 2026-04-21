@@ -1,26 +1,30 @@
 using UnityEngine;
 
-public class FPSCounter : MonoBehaviour
+namespace Scripts.Settings
 {
-    public static FPSCounter FpsCounter { get; private set; }
-
-    private float deltaTime = 0f;
-
-    void Update()
+    [DisallowMultipleComponent]
+    public class FPSCounter : MonoBehaviour
     {
-        deltaTime += (Time.unscaledDeltaTime - deltaTime) * 0.1f;
-    }
+        public static FPSCounter FpsCounter { get; private set; }
 
-    void OnGUI()
-    {
-        int fps = Mathf.CeilToInt(1f / deltaTime);
+        private float deltaTime = 0f;
 
-        GUIStyle style = new GUIStyle
+        void Update()
         {
-            fontSize = 24
-        };
-        style.normal.textColor = Color.white;
+            deltaTime += (Time.unscaledDeltaTime - deltaTime) * 0.1f;
+        }
 
-        GUI.Label(new Rect(10, 10, 200, 50), "FPS: " + fps, style);
+        void OnGUI()
+        {
+            int fps = Mathf.CeilToInt(1f / deltaTime);
+
+            GUIStyle style = new GUIStyle
+            {
+                fontSize = 24
+            };
+            style.normal.textColor = Color.white;
+
+            GUI.Label(new Rect(10, 10, 200, 50), "FPS: " + fps, style);
+        }
     }
 }

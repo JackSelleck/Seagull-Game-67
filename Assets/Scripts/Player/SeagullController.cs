@@ -1,11 +1,13 @@
+using Scripts.Inputs;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Interactions;
 
-namespace SeagullMovementSystem
+namespace Scripts.Player
 {
+    [DisallowMultipleComponent]
     public class SeagullController : MonoBehaviour
     {
+        public PlayerInputManager Inputs;
+
         [Header("References")]
         [SerializeField] private Animator _anim;
         [SerializeField] private Rigidbody _rb;
@@ -31,26 +33,15 @@ namespace SeagullMovementSystem
         [SerializeField] private float _sprintSpeed = 2;
         [SerializeField] private float _jumpForce = 1;
     
-        private InputSystem_Actions _controls;
         private Vector3 _currentVelocityRef;
         private Vector2 _moveInput;
-        private bool _patrolFlightMode = true;
         private bool _isSprinting = false;
         private bool _isGrounded = true;
         private bool _isGliding = false;
 
-        private void Awake()
-        {
-            _controls = new InputSystem_Actions();
-            _controls.Player.Sprint.performed += _ => OnSprintButton();
-            _controls.Player.Sprint.canceled += _ => OnSprintButtonRelease();
-            _controls.Player.Jump.performed += ctx => OnJumpButton(ctx);
-            _controls.Player.Jump.canceled += ctx => StopGliding(ctx);
-        }
-    
         void FixedUpdate()
         {
-            _moveInput = _controls.Player.Move.ReadValue<Vector2>();
+            _moveInput = Inputs.GetMovementDirection();
 
             switch (_isGrounded)
             {
@@ -63,20 +54,30 @@ namespace SeagullMovementSystem
                     break;
             };
 
+            if (Inputs.GetJumpDown())
+                Jump();
+            if (Inputs.GetJumpHeld())
+                Glide(); 
+            else if (_isGliding)
+                StopGliding();
+
+            if (Inputs.GetSprintHeld())
+                Sprint();
+            else if (_isSprinting)
+                StopSprinting();
+
             _anim.SetBool("Idle", _moveInput == Vector2.zero);
         }
 
         #region Movement Modes
         private void WalkMovementMode()
         {
-            _rb.AddForce(Vector3.down * _groundedGravity, ForceMode.Acceleration);
+            // gravity
+            _rb.AddForce(Vector3.down * _groundedGravity, ForceMode.Acceleration); 
 
             float speed = _isSprinting ? _sprintSpeed : _walkSpeed;
 
-            // project on plane makes walking ignore camera y position
-            Vector3 camForward = Vector3.ProjectOnPlane(_cam.forward, Vector3.up).normalized;
-            Vector3 camRight = Vector3.ProjectOnPlane(_cam.right, Vector3.up).normalized;
-            Vector3 movement = (camRight * _moveInput.x + camForward * _moveInput.y) * speed;
+            Vector3 movement = Inputs.GetMovementCameraDirection() * speed;
 
             _rb.linearVelocity = Vector3.SmoothDamp(
                 _rb.linearVelocity,
@@ -86,11 +87,12 @@ namespace SeagullMovementSystem
             );
 
             // Rotate seagull to face movement direction
-            if (movement.magnitude > 0.1f)
-            {
-                Quaternion targetRot = Quaternion.LookRotation(movement);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * 10f);
-            }
+            float targetYaw = movement.magnitude > 0.1f
+                ? Quaternion.LookRotation(movement).eulerAngles.y
+                : transform.eulerAngles.y;
+
+            Quaternion targetRot = Quaternion.Euler(0, targetYaw, 0);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * 10f);
 
             _anim.SetBool("Moving", movement.magnitude > 0.1f);
         }
@@ -106,8 +108,8 @@ namespace SeagullMovementSystem
 
                 transform.Rotate(pitch, yaw, 0, Space.Self);
 
-                _rb.AddRelativeForce(Vector3.forward * _glideForce, ForceMode.Acceleration);
-                _rb.AddForce(Vector3.down * _glidingGravity, ForceMode.Acceleration);
+                _rb.AddRelativeForce(Vector3.forward * _glideForce, ForceMode.Acceleration); // Fly force
+                _rb.AddForce(Vector3.down * _glidingGravity, ForceMode.Acceleration); // gravity
             }
             // If not gliding then they are flying/flapping
             else
@@ -117,41 +119,32 @@ namespace SeagullMovementSystem
 
                 transform.Rotate(pitch, yaw, 0, Space.Self);
 
-                _rb.AddRelativeForce(Vector3.forward * _flyForce, ForceMode.Acceleration);
-                _rb.AddForce(Vector3.down * _flyingGravity, ForceMode.Acceleration);
+                _rb.AddRelativeForce(Vector3.forward * _flyForce, ForceMode.Acceleration); // Fly force
+                _rb.AddForce(Vector3.down * _flyingGravity, ForceMode.Acceleration); // gravity
             }
 
-            // Gradually resets the Z-rotation so the gull dont get stuck upside down
-            float rollAngle = -_moveInput.x * _maxBankAngle; // how far the gull should visually rotate
+            // Gradually resets the Z-rotation so the gull doesnt get stuck upside down or to the side
+            float rollAngle = -_moveInput.x * _maxBankAngle; // how far the gull should rotate
             Quaternion targetRotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, rollAngle);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 2f);       
         }
+        #endregion
 
         #region On Button Checks
-        private void OnJumpButton(InputAction.CallbackContext context)
+        private void Jump()
         {
-            if (context.interaction is TapInteraction)
+            if (_isGrounded)
             {
                 _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
                 _rb.AddRelativeForce(2 * _flyForce * Vector3.forward, ForceMode.Acceleration);
             }
-            if (context.interaction is HoldInteraction)
-            {
-                _isGliding = true;
-                _anim.SetBool("Glide", true);
-            }
         }
-        private void OnSprintButton()
+        private void Glide()
         {
-            _isSprinting = true;
-            _anim.SetBool("SprintButton", true);
+            _isGliding = true;
+            _anim.SetBool("Glide", true);     
         }
-        private void OnSprintButtonRelease()
-        {
-            _isSprinting = false;
-            _anim.SetBool("SprintButton", false);
-        }
-        private void StopGliding(InputAction.CallbackContext _)
+        private void StopGliding()
         {
             if (_isGliding)
             {
@@ -159,29 +152,37 @@ namespace SeagullMovementSystem
                 _anim.SetBool("Glide", false);
             }
         }
+        private void Sprint()
+        {
+            _isSprinting = true;
+            _anim.SetBool("SprintButton", true);
+        }
+        private void StopSprinting()
+        {
+            _isSprinting = false;
+            _anim.SetBool("SprintButton", false);
+        }
         #endregion
 
         #region Ground Detection
         private void OnTriggerEnter(Collider other)
         {
-            _isGrounded = true;
-            _anim.SetBool("Grounded", true);
+            // dont count on collision with another trigger
+            if (!other.isTrigger)
+            {
+                _isGrounded = true;
+                _anim.SetBool("Grounded", true);
+            }
         }
         private void OnTriggerExit(Collider other)
         {
-            _isGrounded = false;
-            _anim.SetBool("Grounded", false);
+            if (!other.isTrigger)
+            {
+                _isGrounded = false;
+                _anim.SetBool("Grounded", false);
+            }
         }
         #endregion
-
-        private void OnEnable()
-        {
-            _controls.Enable();
-        }
-        private void OnDisable()
-        {
-            _controls.Disable();
-        }
 
         /// <summary>
         /// Precision mode:
@@ -191,10 +192,7 @@ namespace SeagullMovementSystem
         /// </summary>
         private void PrecisionFlightMode()
         {
-
-
             Debug.Log("EnteredPrecisionFlightMode");
         }
-        #endregion
     }
 }

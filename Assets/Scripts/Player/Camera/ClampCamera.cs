@@ -1,9 +1,10 @@
 using UnityEngine;
 using Unity.Cinemachine;
 
-namespace SeagullMovementSystem
+namespace Scripts.Player.Camera
 {
     // smoothly clamp upward rotation on cinemachine camera
+    [DisallowMultipleComponent]
     public class ClampCamera : CinemachineExtension
     {
         [SerializeField] private float _minPitch = -10f;

@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Hapineko
       objectReference: {fileID: 0}
+    - target: {fileID: 100032, guid: 7ab8b87ba4f23cb4fa4d8849369342b9, type: 3}
+      propertyPath: m_TagString
+      value: NPC
+      objectReference: {fileID: 0}
     - target: {fileID: 400032, guid: 7ab8b87ba4f23cb4fa4d8849369342b9, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.19596484
@@ -78,6 +82,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 100032, guid: 7ab8b87ba4f23cb4fa4d8849369342b9, type: 3}
       insertIndex: 2
       addedObject: {fileID: 2160579592756919538}
+    - targetCorrespondingSourceObject: {fileID: 100032, guid: 7ab8b87ba4f23cb4fa4d8849369342b9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5215204547029702991}
   m_SourcePrefab: {fileID: 100100000, guid: 7ab8b87ba4f23cb4fa4d8849369342b9, type: 3}
 --- !u!1 &396324004512226674 stripped
 GameObject:
@@ -117,6 +124,27 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: 0
+  m_BaseOffset: 0.7
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 2
+--- !u!135 &5215204547029702991
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 396324004512226674}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1.64
+  m_Center: {x: 0, y: 1.63, z: 0}

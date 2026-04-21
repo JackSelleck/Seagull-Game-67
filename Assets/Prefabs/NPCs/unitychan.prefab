@@ -5665,9 +5665,10 @@ GameObject:
   - component: {fileID: 9186658774831235534}
   - component: {fileID: 9187436519441095104}
   - component: {fileID: 5357433926960484785}
+  - component: {fileID: 8722266597345469062}
   m_Layer: 0
   m_Name: unitychan
-  m_TagString: Untagged
+  m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5816,6 +5817,27 @@ MonoBehaviour:
   timeBlink: 0.4
   threshold: 0.3
   interval: 3
+--- !u!135 &8722266597345469062
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7026257719054162693}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1.64
+  m_Center: {x: 0, y: 1.63, z: 0}
 --- !u!1 &7244286973150132366
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 using Scripts.Inputs;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Scripts.Player
 {
@@ -7,7 +8,7 @@ namespace Scripts.Player
     public class SeagullController : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField] private PlayerInputManager Inputs;
+        [SerializeField] private PlayerManager _player;
         [SerializeField] private PlayerStats _playerStats;
         [SerializeField] private Animator _anim;
         [SerializeField] private Rigidbody _rb;
@@ -19,10 +20,11 @@ namespace Scripts.Player
         private bool _isSprinting = false;
         private bool _isGrounded = true;
         private bool _isGliding = false;
+        private float _glideAccelTimer;
 
         void FixedUpdate()
         {
-            _moveInput = Inputs.GetMovementDirection();
+            _moveInput = _player.Inputs.GetMovementDirection();
 
             if (_isGrounded)
             {
@@ -33,11 +35,11 @@ namespace Scripts.Player
                 FlightMovementMode();
             }
 
-            if (Inputs.GetJumpDown())
+            if (_player.Inputs.GetJumpDown())
                 Jump();
 
-            SetSimpleState(ref _isGliding, "Glide", Inputs.GetJumpHeld());
-            SetSimpleState(ref _isSprinting, "SprintButton", Inputs.GetSprintHeld());
+            SetSimpleState(ref _isGliding, "Glide", _player.Inputs.GetJumpHeld());
+            SetSimpleState(ref _isSprinting, "SprintButton", _player.Inputs.GetSprintHeld());
 
             _anim.SetBool("Idle", _moveInput == Vector2.zero);
         }
@@ -50,7 +52,7 @@ namespace Scripts.Player
 
             float speed = _isSprinting ? _playerStats.sprintSpeed : _playerStats.walkSpeed;
 
-            Vector3 movement = Inputs.GetMovementCameraDirection() * speed;
+            Vector3 movement = _player.Inputs.GetMovementCameraDirection() * speed;
 
             _rb.linearVelocity = Vector3.SmoothDamp(
                 _rb.linearVelocity,
@@ -75,8 +77,18 @@ namespace Scripts.Player
             // Get correct flight value based on if in flap or glide mode
             float verticalRot = _isGliding ? _playerStats.glideModeVerticalRot : _playerStats.flapModeVerticalRot;
             float horizontalRot = _isGliding ? _playerStats.glideModeHorizontalRot : _playerStats.flapModeHorizontalRot;
-            float moveForce = _isGliding ? _playerStats.glideModeForce : _playerStats.flapModeForce;
             float gravity = _isGliding ? _playerStats.glidingModeGravity : _playerStats.flapModeGravity;
+
+            float moveForce;
+            if (_isGliding)
+            {
+                moveForce = AcellerateGlide();
+            }
+            else
+            {
+                _glideAccelTimer = 0f;
+                moveForce = _playerStats.flapModeForce;
+            }
 
             float pitch = _moveInput.y * verticalRot * Time.deltaTime;
             float yaw = _moveInput.x * horizontalRot * Time.deltaTime;
@@ -91,6 +103,14 @@ namespace Scripts.Player
             float rollAngle = -_moveInput.x * _playerStats.maxBankAngle; // how far the gull should rotate
             Quaternion targetRotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, rollAngle);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 2f);       
+        }
+        private float AcellerateGlide()
+        {
+            _glideAccelTimer += Time.fixedDeltaTime;
+            float t = Mathf.Clamp01(_glideAccelTimer / _playerStats.glideModeVelocityTime);
+            float targetForce = _playerStats.glideModeForce + _playerStats.glideModeMaxVelocity;
+            Debug.Log(Mathf.Lerp(_playerStats.glideModeForce, targetForce, t));
+            return Mathf.Lerp(_playerStats.glideModeForce, targetForce, t);
         }
         #endregion
 

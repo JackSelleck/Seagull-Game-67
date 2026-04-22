@@ -18,6 +18,8 @@ MonoBehaviour:
   flapModeHorizontalRot: 100
   flapModeGravity: 2
   glideModeForce: 15
+  glideModeMaxVelocity: 9.67
+  glideModeVelocityTime: 15.67
   glideModeVerticalRot: 50
   glideModeHorizontalRot: 50
   glidingModeGravity: 6

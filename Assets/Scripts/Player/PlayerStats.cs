@@ -20,8 +20,12 @@ namespace Scripts.Player
         public float flapModeGravity = 2;
 
         [Header("Glide Mode Stats")]
-        [Tooltip("Speed whilst gliding")]
+        [Tooltip("Base Speed whilst gliding")]
         public float glideModeForce = 15;
+        [Tooltip("Maximum additional velocity to be gained from holding glide")]
+        public float glideModeMaxVelocity = 10;
+        [Tooltip("How fast velocity is gained upon holding glide")]
+        public float glideModeVelocityTime = 10;
         [Tooltip("How fast you can turn up/down whilst in glide mode")]
         public float glideModeVerticalRot = 50;
         [Tooltip("How fast you can turn left/right whilst in glide mode")]

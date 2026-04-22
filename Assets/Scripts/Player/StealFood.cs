@@ -5,9 +5,9 @@ namespace Scripts.Player
     [DisallowMultipleComponent]
     public class StealFood : MonoBehaviour
     {
+        [SerializeField] private PlayerManager player;
         [SerializeField] private Canvas _canvas;
         [SerializeField] private GameObject _stealFoodCG;
-
         private bool _canSteal = false;
 
         private void Update()

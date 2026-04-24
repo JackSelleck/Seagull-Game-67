@@ -52,6 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Inputs: {fileID: 7662023900103253665}
+  Cam: {fileID: 0}
 --- !u!114 &7662023900103253665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65,7 +66,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  _cam: {fileID: 0}
+  player: {fileID: 2332289468046859649}
 --- !u!114 &80593004653874709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,12 +79,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfac925911207c14e8a65324166ef084, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 2332289468046859649}
   _playerStats: {fileID: 11400000, guid: 5f123821209ee604a99c80e6332cd25b, type: 2}
   _anim: {fileID: 1195842453536653265}
   _rb: {fileID: 2745681619666435854}
   _col: {fileID: 3851690578913030833}
-  _cam: {fileID: 0}
+  _player: {fileID: 2332289468046859649}
 --- !u!114 &1513292664408093149
 MonoBehaviour:
   m_ObjectHideFlags: 0

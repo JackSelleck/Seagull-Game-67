@@ -1,30 +1,31 @@
-using Scripts.Inputs;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Scripts.Player
 {
     [DisallowMultipleComponent]
     public class SeagullController : MonoBehaviour
     {
-        [Header("References")]
-        [SerializeField] private PlayerManager _player;
         [SerializeField] private PlayerStats _playerStats;
         [SerializeField] private Animator _anim;
         [SerializeField] private Rigidbody _rb;
         [SerializeField] private CapsuleCollider _col;
-        [SerializeField] private Transform _cam;
-    
+        [SerializeField] private PlayerReferenceManager _playerRefs;
+
         private Vector3 _currentVelocityRef;
         private Vector2 _moveInput;
         private bool _isSprinting = false;
-        private bool _isGrounded = true;
+        private bool _isGrounded = false;
         private bool _isGliding = false;
         private float _glideAccelTimer;
 
+        private void Awake()
+        {
+            _playerRefs = GetComponent<PlayerReferenceManager>();
+        }
+
         void FixedUpdate()
         {
-            _moveInput = _player.Inputs.GetMovementDirection();
+            _moveInput = _playerRefs.Inputs.GetMovementDirection();
 
             if (_isGrounded)
             {
@@ -35,11 +36,11 @@ namespace Scripts.Player
                 FlightMovementMode();
             }
 
-            if (_player.Inputs.GetJumpDown())
+            if (_playerRefs.Inputs.GetJumpDown())
                 Jump();
 
-            SetSimpleState(ref _isGliding, "Glide", _player.Inputs.GetJumpHeld());
-            SetSimpleState(ref _isSprinting, "SprintButton", _player.Inputs.GetSprintHeld());
+            SetSimpleState(ref _isGliding, "Glide", _playerRefs.Inputs.GetJumpHeld());
+            SetSimpleState(ref _isSprinting, "SprintButton", _playerRefs.Inputs.GetSprintHeld());
 
             _anim.SetBool("Idle", _moveInput == Vector2.zero);
         }
@@ -52,7 +53,7 @@ namespace Scripts.Player
 
             float speed = _isSprinting ? _playerStats.sprintSpeed : _playerStats.walkSpeed;
 
-            Vector3 movement = _player.Inputs.GetMovementCameraDirection() * speed;
+            Vector3 movement = _playerRefs.Inputs.GetMovementCameraDirection() * speed;
 
             _rb.linearVelocity = Vector3.SmoothDamp(
                 _rb.linearVelocity,
@@ -89,7 +90,8 @@ namespace Scripts.Player
                 _glideAccelTimer = 0f;
                 moveForce = _playerStats.flapModeForce;
             }
-
+            // float pitch
+            // pitch = -_moveInput.y * verticalRot * Time.deltaTime;
             float pitch = _moveInput.y * verticalRot * Time.deltaTime;
             float yaw = _moveInput.x * horizontalRot * Time.deltaTime;
 
@@ -109,7 +111,7 @@ namespace Scripts.Player
             _glideAccelTimer += Time.fixedDeltaTime;
             float t = Mathf.Clamp01(_glideAccelTimer / _playerStats.glideModeVelocityTime);
             float targetForce = _playerStats.glideModeForce + _playerStats.glideModeMaxVelocity;
-            Debug.Log(Mathf.Lerp(_playerStats.glideModeForce, targetForce, t));
+            //Debug.Log(Mathf.Lerp(_playerStats.glideModeForce, targetForce, t));
             return Mathf.Lerp(_playerStats.glideModeForce, targetForce, t);
         }
         #endregion

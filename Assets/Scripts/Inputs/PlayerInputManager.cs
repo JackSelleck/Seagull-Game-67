@@ -1,3 +1,4 @@
+using Scripts.Player;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,8 +8,8 @@ namespace Scripts.Inputs
     [DisallowMultipleComponent]
     public class PlayerInputManager : MonoBehaviour
     {
-        [SerializeField] private InputActionAsset actions;
-        [SerializeField] private Camera _cam;
+        [SerializeField] private InputActionAsset _actions;
+        [SerializeField] private PlayerReferenceManager _playerRefs;
 
         // Player actions
         private InputAction _move;
@@ -46,26 +47,26 @@ namespace Scripts.Inputs
 
         private void CacheActions()
         {
-            _move = actions["Move"];
-            _look = actions["Look"];
-            _attack = actions["Attack"];
-            _interact = actions["Interact"];
-            _crouch = actions["Crouch"];
-            _jump = actions["Jump"];
-            _previous = actions["Previous"];
-            _next = actions["Next"];
-            _sprint = actions["Sprint"];
+            _move = _actions["Move"];
+            _look = _actions["Look"];
+            _attack = _actions["Attack"];
+            _interact = _actions["Interact"];
+            _crouch = _actions["Crouch"];
+            _jump = _actions["Jump"];
+            _previous = _actions["Previous"];
+            _next = _actions["Next"];
+            _sprint = _actions["Sprint"];
 
-            _navigate = actions["Navigate"];
-            _submit = actions["Submit"];
-            _cancel = actions["Cancel"];
-            _point = actions["Point"];
-            _click = actions["Click"];
-            _scrollWheel = actions["ScrollWheel"];
-            _middleClick = actions["MiddleClick"];
-            _rightClick = actions["RightClick"];
-            _trackedDevicePosition = actions["TrackedDevicePosition"];
-            _trackedDeviceOrientation = actions["TrackedDeviceOrientation"];
+            _navigate = _actions["Navigate"];
+            _submit = _actions["Submit"];
+            _cancel = _actions["Cancel"];
+            _point = _actions["Point"];
+            _click = _actions["Click"];
+            _scrollWheel = _actions["ScrollWheel"];
+            _middleClick = _actions["MiddleClick"];
+            _rightClick = _actions["RightClick"];
+            _trackedDevicePosition = _actions["TrackedDevicePosition"];
+            _trackedDeviceOrientation = _actions["TrackedDeviceOrientation"];
         }
 
         public Vector2 GetMovementDirection()
@@ -81,8 +82,8 @@ namespace Scripts.Inputs
 
             if (direction.sqrMagnitude > 0)
             {
-                var rotation = Quaternion.FromToRotation(_cam.transform.up, transform.up);
-                direction = rotation * _cam.transform.rotation * direction;
+                var rotation = Quaternion.FromToRotation(_playerRefs.Cam.transform.up, transform.up);
+                direction = rotation * _playerRefs.Cam.transform.rotation * direction;
 
                 if (localSpace)
                 {
@@ -136,11 +137,17 @@ namespace Scripts.Inputs
 #endif
         }
 
-        private void Awake() => CacheActions();
+        private void Awake()
+        {
+            if (_playerRefs == null)
+                _playerRefs = GetComponent<PlayerReferenceManager>();
+
+            CacheActions();
+        }
 
         private void Start()
         {
-            actions.Enable();
+            _actions.Enable();
         }
 
         private void Update()
@@ -158,7 +165,7 @@ namespace Scripts.Inputs
         {
             if (shouldNotMove)
             {
-                foreach (var action in actions)
+                foreach (var action in _actions)
                 {
                    action.Disable();
                 }
@@ -166,7 +173,7 @@ namespace Scripts.Inputs
             else
             {
                 // enable everything again
-                actions.Enable();
+                _actions.Enable();
             }
         }
 
@@ -174,7 +181,7 @@ namespace Scripts.Inputs
         {
             if (inUI)
             {
-                foreach (var action in actions)
+                foreach (var action in _actions)
                 {
                     if (UIActions.Contains(action.name))
                         action.Enable();
@@ -185,11 +192,11 @@ namespace Scripts.Inputs
             else
             {
                 // enable everything again
-                actions.Enable();
+                _actions.Enable();
             }
         }
 
-        private void OnEnable() => actions.Enable();
-        private void OnDisable() => actions.Disable();
+        private void OnEnable() => _actions.Enable();
+        private void OnDisable() => _actions.Disable();
     }
 }

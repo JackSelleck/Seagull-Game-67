@@ -5,10 +5,16 @@ namespace Scripts.Player
     [DisallowMultipleComponent]
     public class StealFood : MonoBehaviour
     {
-        [SerializeField] private PlayerManager player;
-        [SerializeField] private Canvas _canvas;
-        [SerializeField] private GameObject _stealFoodCG;
+        [SerializeField] private PlayerReferenceManager _playerRefs;
         private bool _canSteal = false;
+
+        private void Awake()
+        {
+            if (_playerRefs == null)
+            {
+                _playerRefs = gameObject.GetComponent<PlayerReferenceManager>();
+            }
+        }
 
         private void Update()
         {
@@ -20,7 +26,7 @@ namespace Scripts.Player
             if (other.CompareTag("NPC"))
             {
                 _canSteal = true;
-                _stealFoodCG.SetActive(true);
+                _playerRefs.UIManager.StealFoodActionActiveSwitch(true);
             }
         }
         private void OnTriggerExit(Collider other)
@@ -28,7 +34,7 @@ namespace Scripts.Player
             if (other.CompareTag("NPC"))
             {
                 _canSteal = false;
-                _stealFoodCG.SetActive(false);
+                _playerRefs.UIManager.StealFoodActionActiveSwitch(false);
             }
         }
     }

@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Scripts.Player.Camera
 {
+    [DisallowMultipleComponent]
     public class SeagullCamera : MonoBehaviour
     {
         [SerializeField] private Transform _seagull;

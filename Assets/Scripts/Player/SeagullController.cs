@@ -16,11 +16,14 @@ namespace Scripts.Player
         private bool _isSprinting = false;
         private bool _isGrounded = false;
         private bool _isGliding = false;
+        private bool _forceFlatFlight = false;
+        private float _flatFlightMinY;
         private float _glideAccelTimer;
 
         private void Awake()
         {
-            _playerRefs = GetComponent<PlayerReferenceManager>();
+            if (_playerRefs == null)
+                _playerRefs = GetComponent<PlayerReferenceManager>();
         }
 
         void FixedUpdate()
@@ -101,6 +104,36 @@ namespace Scripts.Player
 
             _anim.SetFloat("Speed", _rb.linearVelocity.magnitude);
 
+            if (_forceFlatFlight)
+            {
+                // limit downward rotation
+                Vector3 euler = transform.eulerAngles;
+                // Normalise euler angles to be -180/180, rather than 0-360 to simplify down lock
+                float normalisedPitch = transform.rotation.eulerAngles.x;
+                normalisedPitch = Mathf.DeltaAngle(0f, normalisedPitch);
+                if (normalisedPitch > 0f)
+                {
+                    transform.eulerAngles = new Vector3(0f, euler.y, euler.z);
+                    Vector3 newAngle = _rb.angularVelocity;
+                    if (newAngle.x > 0f) _rb.angularVelocity = new Vector3(0f, newAngle.y, newAngle.z);
+                }
+
+                // smoothly push seagull up so it dosent go too close to the ground
+                float dip = _flatFlightMinY - _rb.position.y;
+
+                _rb.AddForce(20f * Mathf.Max(dip, 0f) * Vector3.up, ForceMode.Acceleration);
+
+                if (dip > 0f)
+                {
+                    _rb.AddForce(Vector3.up * dip * 20f, ForceMode.Acceleration);
+                    if (_rb.linearVelocity.y < 0f)
+                    {
+                        Vector3 velocity = _rb.linearVelocity;
+                        _rb.linearVelocity = new Vector3(velocity.x, velocity.y * 0.85f, velocity.z);
+                    }
+                }
+            }
+
             // Gradually resets the Z-rotation so the gull doesnt get stuck upside down or to the side
             float rollAngle = -_moveInput.x * _playerStats.maxBankAngle; // how far the gull should rotate
             Quaternion targetRotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, rollAngle);
@@ -140,7 +173,13 @@ namespace Scripts.Player
         private void OnTriggerEnter(Collider other)
         {
             // dont count on collision with another trigger
-            if (!other.isTrigger)
+            if (other.CompareTag("NoGroundingZone"))
+            {
+                _forceFlatFlight = true;
+                _flatFlightMinY = transform.position.y;
+                return;
+            }
+            else if (!other.isTrigger)
             {
                 _isGrounded = true;
                 _anim.SetBool("Grounded", true);
@@ -148,6 +187,10 @@ namespace Scripts.Player
         }
         private void OnTriggerExit(Collider other)
         {
+            if (other.CompareTag("NoGroundingZone"))
+            {
+                _forceFlatFlight = false;
+            }
             if (!other.isTrigger)
             {
                 _isGrounded = false;

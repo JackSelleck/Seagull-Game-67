@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Scripts.UI 
 {
+    [DisallowMultipleComponent]
     public class UIManager : MonoBehaviour
     {
         public GameObject pauseMenu;

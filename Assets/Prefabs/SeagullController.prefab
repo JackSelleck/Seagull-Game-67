@@ -53,6 +53,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Inputs: {fileID: 7662023900103253665}
   Cam: {fileID: 0}
+  UIManager: {fileID: 0}
 --- !u!114 &7662023900103253665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65,8 +66,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d178cbd38de40d438d16b59d83942fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  player: {fileID: 2332289468046859649}
+  _actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  _playerRefs: {fileID: 2332289468046859649}
 --- !u!114 &80593004653874709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83,7 +84,7 @@ MonoBehaviour:
   _anim: {fileID: 1195842453536653265}
   _rb: {fileID: 2745681619666435854}
   _col: {fileID: 3851690578913030833}
-  _player: {fileID: 2332289468046859649}
+  _playerRefs: {fileID: 2332289468046859649}
 --- !u!114 &1513292664408093149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96,9 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93a94ab384cbad5449dc5e81e0f1074b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 2332289468046859649}
-  _canvas: {fileID: 0}
-  _stealFoodCG: {fileID: 0}
+  _playerRefs: {fileID: 2332289468046859649}
 --- !u!54 &2745681619666435854
 Rigidbody:
   m_ObjectHideFlags: 0

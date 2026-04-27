@@ -12,7 +12,7 @@ namespace Scripts.Player
         {
             if (_playerRefs == null)
             {
-                _playerRefs = gameObject.GetComponent<PlayerReferenceManager>();
+                _playerRefs = GetComponent<PlayerReferenceManager>();
             }
         }
 

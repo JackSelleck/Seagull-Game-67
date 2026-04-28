@@ -23,7 +23,7 @@ namespace Scripts.Player
         }
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("NPC"))
+            if (other.CompareTag(TagConstants.NPC))
             {
                 _canSteal = true;
                 _playerRefs.UIManager.StealFoodActionActiveSwitch(true);
@@ -31,7 +31,7 @@ namespace Scripts.Player
         }
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("NPC"))
+            if (other.CompareTag(TagConstants.NPC))
             {
                 _canSteal = false;
                 _playerRefs.UIManager.StealFoodActionActiveSwitch(false);

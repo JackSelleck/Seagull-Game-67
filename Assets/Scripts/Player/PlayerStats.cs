@@ -8,6 +8,8 @@ namespace Scripts.Player
         [Header("General flight stats")]
         [Tooltip("Maximum Z rotation of character")]
         public float maxBankAngle = 80;
+        [Tooltip("How far forward should flight blocking obstacles be checked for")]
+        public float forwardBlockCheckDist = 0.5f;
 
         [Header("Flap Mode Stats")]
         [Tooltip("Speed whilst flapping")]

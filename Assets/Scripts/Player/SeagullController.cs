@@ -1,3 +1,4 @@
+using Scripts.Inputs;
 using UnityEngine;
 
 namespace Scripts.Player
@@ -6,13 +7,12 @@ namespace Scripts.Player
     public class SeagullController : MonoBehaviour
     {
         [SerializeField] private PlayerStats _playerStats;
+        [SerializeField] private PlayerInputManager _inputs;
         [SerializeField] private Animator _anim;
         [SerializeField] private Rigidbody _rb;
         [SerializeField] private CapsuleCollider _col;
-        [SerializeField] private PlayerReferenceManager _playerRefs;
 
         // flat flight
-        private Collider _flatFlightZone;
         private bool _forceFlatFlight = false;
         private float _flatFlightMinY;
 
@@ -24,17 +24,15 @@ namespace Scripts.Player
         private bool _isGliding = false;
         private float _glideAccelTimer;
 
-
-
         private void Awake()
         {
-            if (_playerRefs == null)
-                _playerRefs = GetComponent<PlayerReferenceManager>();
+            if (_inputs == null)
+                _inputs = GetComponent<PlayerInputManager>();
         }
 
         void FixedUpdate()
         {
-            _moveInput = _playerRefs.Inputs.GetMovementDirection();
+            _moveInput = _inputs.GetMovementDirection();
 
             if (_isGrounded)
             {
@@ -45,11 +43,11 @@ namespace Scripts.Player
                 FlightMovementMode();
             }
 
-            if (_playerRefs.Inputs.GetJumpDown())
+            if (_inputs.GetJumpDown())
                 Jump();
 
-            SetSimpleState(ref _isGliding, PlayerAnimHash.Glide, _playerRefs.Inputs.GetJumpHeld());
-            SetSimpleState(ref _isSprinting, PlayerAnimHash.SprintButton, _playerRefs.Inputs.GetSprintHeld());
+            SetSimpleState(ref _isGliding, PlayerAnimHash.Glide, _inputs.GetJumpHeld());
+            SetSimpleState(ref _isSprinting, PlayerAnimHash.SprintButton, _inputs.GetSprintHeld());
 
             _anim.SetBool(PlayerAnimHash.Idle, _moveInput == Vector2.zero);
         }
@@ -62,7 +60,7 @@ namespace Scripts.Player
 
             float speed = _isSprinting ? _playerStats.sprintSpeed : _playerStats.walkSpeed;
 
-            Vector3 movement = _playerRefs.Inputs.GetMovementCameraDirection() * speed;
+            Vector3 movement = _inputs.GetMovementCameraDirection() * speed;
 
             _rb.linearVelocity = Vector3.SmoothDamp(
                 _rb.linearVelocity,
@@ -99,9 +97,7 @@ namespace Scripts.Player
             {
                 _glideAccelTimer = 0f;
                 moveForce = _playerStats.flapModeForce;
-            }
-
-            FindFlightBlockings();
+            }            
 
             // float pitch
             // pitch = -_moveInput.y * verticalRot * Time.deltaTime;
@@ -119,13 +115,16 @@ namespace Scripts.Player
             Quaternion targetRotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, rollAngle);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 2f);
 
-            if (_navigateOverObstacle)
+            if (FindFlightBlockings())
             {
-                // Makes the gull freak out and messes up your controls as punishment for hitting a building
-                _rb.angularVelocity = new Vector3(transform.rotation.x, 90f, transform.rotation.z);
                 // Makes the gull navigate over the obstacle
                 _rb.AddForce(10f * Vector3.up, ForceMode.Acceleration);
                 _rb.linearVelocity = new Vector3(Vector3.up.x, Vector3.up.y * 1.5f, Vector3.up.z);
+                // Makes the gull freak out and messes up your controls as response to hitting an obstacle
+                _rb.angularVelocity = new Vector3(transform.rotation.x, 90f, transform.rotation.z);
+                // Rotate to face the sky during freak out, helps ensure the player doesnt get stuck
+                Quaternion _navigationRotation = Quaternion.Euler(-90f, transform.eulerAngles.y, transform.eulerAngles.z);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, _navigationRotation, Time.deltaTime * 10000f);
             }
             else if (_forceFlatFlight) 
             {
@@ -152,46 +151,25 @@ namespace Scripts.Player
                 }
             }
         }
-        private void FindFlightBlockings()
+        private bool FindFlightBlockings()
         {
             Vector3 origin = transform.position;
-            Vector3 globalForwardDir = Vector3.forward;
             Vector3 globalUpwardDir = Vector3.up;
             Vector3 forwardDir = transform.forward;
             forwardDir.y = 0f;
             forwardDir.Normalize();
 
-            RaycastHit forwardHit;
+            // check if there is an obstacle in front
+            bool isBlocked = Physics.Raycast(origin, forwardDir, out RaycastHit forwardHit, _playerStats.forwardBlockCheckDist);
 
-            bool isBlocked = Physics.Raycast(origin, forwardDir, out forwardHit, _playerStats.forwardBlockCheckDist);
-
-            if (isBlocked)
+            if (isBlocked && !forwardHit.collider.CompareTag(TagConstants.NPC))
             {
-                bool spaceAbove = !Physics.Raycast(origin, globalUpwardDir, 100);
-
-                if (spaceAbove)
-                {
-                    _navigateOverObstacle = true;
-                    Debug.Log("Blocked in front, but space above");
-                }
-                else
-                {
-                    _navigateOverObstacle = false;
-                    Debug.Log("Blocked and no space above.");
-                }
-
-#if UNITY_EDITOR
-                Debug.DrawRay(origin, forwardDir * _playerStats.forwardBlockCheckDist, Color.red);
-                Debug.DrawRay(origin, globalUpwardDir * 100, Color.green);
-#endif
+                // check if there is space above
+                return _navigateOverObstacle = !Physics.Raycast(origin, globalUpwardDir, 100);
             }
             else
             {
-                _navigateOverObstacle = false;
-#if UNITY_EDITOR
-                Debug.DrawRay(origin, forwardDir * _playerStats.forwardBlockCheckDist, Color.green);
-                Debug.DrawRay(origin, globalUpwardDir * 100, Color.green);
-#endif
+                return _navigateOverObstacle = false;
             }
         }
         private float AcellerateGlide()
@@ -213,13 +191,13 @@ namespace Scripts.Player
             }
         }
         // Helper to change states that are just a bool and animation change
-        private void SetSimpleState(ref bool current, int animParam, bool desired)
+        private void SetSimpleState(ref bool current, int animParamHash, bool desired)
         {
             // If bool being passed matches what its supposed to be then return
             if (current == desired) return;
             // Otherwise update state to match
             current = desired;
-            _anim.SetBool(animParam, desired);
+            _anim.SetBool(animParamHash, desired);
         }
         #endregion
 
@@ -229,7 +207,6 @@ namespace Scripts.Player
             // dont count on collision with another trigger
             if (other.CompareTag(TagConstants.NoGroundingZone))
             {
-                _flatFlightZone = other;
                 _forceFlatFlight = true;
                 _flatFlightMinY = other.bounds.min.y;
                 return;
@@ -245,7 +222,6 @@ namespace Scripts.Player
             if (other.CompareTag(TagConstants.NoGroundingZone))
             {
                 _forceFlatFlight = false;
-                _flatFlightZone = null;
             }
             if (!other.isTrigger)
             {

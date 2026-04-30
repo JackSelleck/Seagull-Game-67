@@ -9,7 +9,7 @@ namespace Scripts.Inputs
     public class PlayerInputManager : MonoBehaviour
     {
         [SerializeField] private InputActionAsset _actions;
-        [SerializeField] private PlayerReferenceManager _playerRefs;
+        [SerializeField] private Camera _cam;
 
         // Player actions
         private InputAction _move;
@@ -82,8 +82,8 @@ namespace Scripts.Inputs
 
             if (direction.sqrMagnitude > 0)
             {
-                var rotation = Quaternion.FromToRotation(_playerRefs.Cam.transform.up, transform.up);
-                direction = rotation * _playerRefs.Cam.transform.rotation * direction;
+                var rotation = Quaternion.FromToRotation(_cam.transform.up, transform.up);
+                direction = rotation * _cam.transform.rotation * direction;
 
                 if (localSpace)
                 {
@@ -139,8 +139,10 @@ namespace Scripts.Inputs
 
         private void Awake()
         {
-            if (_playerRefs == null)
-                _playerRefs = GetComponent<PlayerReferenceManager>();
+            if (_cam == null)
+            {
+                _cam = Camera.main;
+            }
 
             CacheActions();
         }

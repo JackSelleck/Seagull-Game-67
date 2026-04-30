@@ -1,3 +1,4 @@
+using Scripts.UI;
 using UnityEngine;
 
 namespace Scripts.Player
@@ -5,15 +6,17 @@ namespace Scripts.Player
     [DisallowMultipleComponent]
     public class StealFood : MonoBehaviour
     {
-        [SerializeField] private PlayerReferenceManager _playerRefs;
+        [SerializeField] private UIManager _uiManager;
+        [SerializeField] private AnnoyanceManager _annoyanceManager;
         private bool _canSteal = false;
 
         private void Awake()
         {
-            if (_playerRefs == null)
-            {
-                _playerRefs = GetComponent<PlayerReferenceManager>();
-            }
+            if (_uiManager == null)
+                _uiManager = GetComponent<UIManager>();
+            
+            if (_annoyanceManager == null)
+                _annoyanceManager = GetComponent<AnnoyanceManager>();        
         }
 
         private void Update()
@@ -26,7 +29,8 @@ namespace Scripts.Player
             if (other.CompareTag(TagConstants.NPC))
             {
                 _canSteal = true;
-                _playerRefs.UIManager.StealFoodActionActiveSwitch(true);
+                _uiManager.StealFoodActionActiveSwitch(true);
+                _annoyanceManager.IncreaseAnnoyance(1);
             }
         }
         private void OnTriggerExit(Collider other)
@@ -34,7 +38,7 @@ namespace Scripts.Player
             if (other.CompareTag(TagConstants.NPC))
             {
                 _canSteal = false;
-                _playerRefs.UIManager.StealFoodActionActiveSwitch(false);
+                _uiManager.StealFoodActionActiveSwitch(false);
             }
         }
     }

@@ -33,7 +33,7 @@ namespace Scripts.Player
         }
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag(TagConstants.NPC))
+            if (other.CompareTag("NPC"))
             {
                 _canSteal = true;
                 _uiManager.StealFoodActionActiveSwitch(true);

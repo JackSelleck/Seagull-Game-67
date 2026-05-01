@@ -12598,7 +12598,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 102146, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
       propertyPath: m_TagString
-      value: NoGroundingZone
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 102146, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -39443,11 +39443,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4301978, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
---- !u!1 &472300149 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8340690619055720559, guid: a59c304ff0450d842a3d4b43443cfc14, type: 3}
-  m_PrefabInstance: {fileID: 719767512}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &473011451 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 101788, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
@@ -45345,18 +45340,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2332289468046859649, guid: a59c304ff0450d842a3d4b43443cfc14, type: 3}
-      propertyPath: Cam
-      value: 
-      objectReference: {fileID: 1970505541}
-    - target: {fileID: 2332289468046859649, guid: a59c304ff0450d842a3d4b43443cfc14, type: 3}
-      propertyPath: UIManager
+    - target: {fileID: 1513292664408093149, guid: a59c304ff0450d842a3d4b43443cfc14, type: 3}
+      propertyPath: _uiManager
       value: 
       objectReference: {fileID: 1471233527}
-    - target: {fileID: 2332289468046859649, guid: a59c304ff0450d842a3d4b43443cfc14, type: 3}
-      propertyPath: AnnoyanceManager
-      value: 
-      objectReference: {fileID: 719767521}
+    - target: {fileID: 2745681619666435854, guid: a59c304ff0450d842a3d4b43443cfc14, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
     - target: {fileID: 4037313257806122537, guid: a59c304ff0450d842a3d4b43443cfc14, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.507
@@ -45397,6 +45388,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6218069514554663311, guid: a59c304ff0450d842a3d4b43443cfc14, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 7662023900103253665, guid: a59c304ff0450d842a3d4b43443cfc14, type: 3}
+      propertyPath: _cam
+      value: 
+      objectReference: {fileID: 1970505541}
     - target: {fileID: 8340690619055720559, guid: a59c304ff0450d842a3d4b43443cfc14, type: 3}
       propertyPath: m_Name
       value: SeagullController
@@ -45404,28 +45403,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8340690619055720559, guid: a59c304ff0450d842a3d4b43443cfc14, type: 3}
-      insertIndex: 5
-      addedObject: {fileID: 719767521}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a59c304ff0450d842a3d4b43443cfc14, type: 3}
 --- !u!4 &719767513 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4037313257806122537, guid: a59c304ff0450d842a3d4b43443cfc14, type: 3}
   m_PrefabInstance: {fileID: 719767512}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &719767521
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 472300149}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1736df6808fbba0468613bd6417ad791, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &723333869 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 101006, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
@@ -55214,7 +55198,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1163768858
 RectTransform:
   m_ObjectHideFlags: 0
@@ -55243,7 +55227,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1163768857}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -56089,7 +56073,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1219980808
 RectTransform:
   m_ObjectHideFlags: 0
@@ -56118,7 +56102,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1219980807}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -61856,7 +61840,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
-  m_AdditionalShaderChannelsFlag: 1
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -61923,9 +61907,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cbf7766e29261748954d5499026c66f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseMenu: {fileID: 1163768857}
-  HUD: {fileID: 1219980807}
-  stealFoodAction: {fileID: 1898529720}
+  pauseMenu: {fileID: 1163768859}
+  HUD: {fileID: 1219980809}
+  stealFoodAction: {fileID: 1898529721}
 --- !u!1 &1471528378 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 101158, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
@@ -72721,7 +72705,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!225 &1898529721
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -72730,7 +72714,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1898529720}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0

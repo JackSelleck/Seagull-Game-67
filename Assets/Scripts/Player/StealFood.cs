@@ -13,8 +13,15 @@ namespace Scripts.Player
         private void Awake()
         {
             if (_uiManager == null)
+            {
                 _uiManager = GetComponent<UIManager>();
-            
+
+                if (_uiManager == null)
+                {
+                    Debug.LogError("StealFood.cs Unable to find UIManager!");
+                }
+            }
+
             if (_annoyanceManager == null)
                 _annoyanceManager = GetComponent<AnnoyanceManager>();        
         }
@@ -31,6 +38,7 @@ namespace Scripts.Player
                 _canSteal = true;
                 _uiManager.StealFoodActionActiveSwitch(true);
                 _annoyanceManager.IncreaseAnnoyance(1);
+                Debug.Log("brap");
             }
         }
         private void OnTriggerExit(Collider other)

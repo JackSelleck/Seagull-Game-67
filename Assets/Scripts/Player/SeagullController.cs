@@ -162,7 +162,7 @@ namespace Scripts.Player
             // check if there is an obstacle in front
             bool isBlocked = Physics.Raycast(origin, forwardDir, out RaycastHit forwardHit, _playerStats.forwardBlockCheckDist);
 
-            if (isBlocked && !forwardHit.collider.CompareTag(TagConstants.NPC))
+            if (isBlocked && !forwardHit.collider.CompareTag(TagConstants.NPC) && !forwardHit.collider.CompareTag(TagConstants.NoGroundingZone))
             {
                 // check if there is space above
                 return _navigateOverObstacle = !Physics.Raycast(origin, globalUpwardDir, 100);

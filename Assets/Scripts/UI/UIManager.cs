@@ -5,43 +5,43 @@ namespace Scripts.UI
     [DisallowMultipleComponent]
     public class UIManager : MonoBehaviour
     {
-        public GameObject pauseMenu;
-        public GameObject HUD;
-        public GameObject stealFoodAction;
+        public CanvasGroup pauseMenu;
+        public CanvasGroup HUD;
+        public CanvasGroup stealFoodAction;
 
         /// <summary>
         /// Set UI elements active or inactive
         /// </summary>
         public void PauseMenuActiveSetter(bool setActive)
         {
-            pauseMenu.SetActive(setActive);
+            pauseMenu.alpha = setActive? 1 : 0;
         }
         public void HUDActiveSwitch(bool setActive)
         {
-            HUD.SetActive(setActive);
+            HUD.alpha = setActive ? 1 : 0;
         }
         public void StealFoodActionActiveSwitch(bool setActive)
         {
-            stealFoodAction.SetActive(setActive);
+            stealFoodAction.alpha = setActive ? 1 : 0;
         }
 
         /// <summary>
-        /// Switch active bool to opposite
+        /// Switch to opposite of current state
         /// </summary>
         public void PauseMenuActiveSwitch()
         {
-            bool activeState =! pauseMenu.activeSelf;
-            pauseMenu.SetActive(activeState);
+            int activeState = stealFoodAction.alpha.Equals(1) ? 0 : 1;
+            pauseMenu.alpha = activeState;
         }
         public void HUDActiveSwitch()
         {
-            bool activeState = !HUD.activeSelf;
-            HUD.SetActive(activeState);
+            int activeState = stealFoodAction.alpha.Equals(1) ? 0 : 1;
+            HUD.alpha = activeState;
         }
         public void StealFoodActionActiveSwitch()
         {
-            bool activeState = !stealFoodAction.activeSelf;
-            stealFoodAction.SetActive(activeState);
+            int activeState = stealFoodAction.alpha.Equals(1) ? 0 : 1;
+            stealFoodAction.alpha = activeState;
         }
     }
 }

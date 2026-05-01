@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Scripts.Player
 {
+    [DisallowMultipleComponent]
     public class AnnoyanceManager : MonoBehaviour
     {
         private int annoyance;

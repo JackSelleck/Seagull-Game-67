@@ -8,7 +8,10 @@ namespace Scripts.NPCs
     {
         [SerializeField] private NavMeshAgent agent;
         [SerializeField] private CityGroundPathfindingPositions groundPathfindingPositions;
-        
+
+        private float timer;
+        private readonly float interval = 1f;
+
         void Start()
         {
             agent.SetDestination(groundPathfindingPositions.NewPosition());
@@ -16,9 +19,15 @@ namespace Scripts.NPCs
     
         void Update()
         {
-            if (!agent.pathPending && agent.remainingDistance < 0.5f)
+            timer += Time.deltaTime;
+            if (timer >= interval)
             {
-                agent.SetDestination(groundPathfindingPositions.NewPosition());
+                timer = 0f;
+
+                if (!agent.pathPending && agent.remainingDistance < 0.5f)
+                {
+                    agent.SetDestination(groundPathfindingPositions.NewPosition());
+                }
             }
         }
     }

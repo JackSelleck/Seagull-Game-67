@@ -1,0 +1,89 @@
+using Scripts.Player;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace Scripts.Enemies
+{
+    public class BallEnemy : Enemy
+    {
+        [SerializeField] private Rigidbody _rb;
+        [SerializeField] private List<Transform> _points;
+        [SerializeField] private float _speedAmplifier = 5f;
+        [SerializeField] private float _arcAmplifier = 2f;
+
+        private Vector3 _start;
+        private Vector3 _end;
+
+        private int _currentIndex = 0;
+        private float _moveDuration = 1f;
+        private float _time = 0f;
+        protected override void SlowedEnemyUpdate() { }
+        protected override void OnPlayerHit(PlayerHealth player) { }
+
+        private void Awake()
+        {
+            if (_rb == null)
+                _rb = GetComponent<Rigidbody>();   
+        }
+
+        private void Start()
+        {
+            if (_points.Count < 0)
+            {
+                Debug.Log("Ball enemy has no assigned positions!");
+                return;
+            }
+
+            SetupNextSegment(_currentIndex);
+        }
+
+        private void FixedUpdate()
+        {
+            if (_points.Count < 0)
+            {
+                Debug.Log("Ball enemy has no assigned positions!");
+                return;
+            }
+
+            _time += Time.fixedDeltaTime;
+            float t = _time / _moveDuration;
+
+            if (t >= 0.95f)
+            {
+                transform.localScale = new Vector3(transform.localScale.x, 1.67f, transform.localScale.z);
+            }
+            if (t >= 1f)
+            {
+                _rb.MovePosition(_end);
+                SetupNextSegment(_currentIndex++);
+                transform.localScale = new Vector3(transform.localScale.x, 2.67f, transform.localScale.z);
+                return;
+            }
+
+            Vector3 pos = Vector3.Lerp(_start, _end, t);
+
+            float distance = Vector3.Distance(_start, _end);
+            float height = Mathf.Sin(t * Mathf.PI) * _arcAmplifier * distance; 
+            pos.y += height;
+
+            _rb.MovePosition(pos);
+        }
+
+        private void SetupNextSegment(int index)
+        {
+            _time = 0f;
+
+            if (index >= _points.Count)
+            {
+                index = 0;
+                _currentIndex = 0;
+            }
+
+            _start = transform.position;
+            _end = _points[index].position;
+
+            float distance = (_start - _end).magnitude / 4;
+            _moveDuration = distance / _speedAmplifier;
+        }
+    }
+}

@@ -3624,7 +3624,7 @@ NavMeshAgent:
   m_Height: 2
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 2
+  m_ObstacleAvoidanceType: 1
 --- !u!95 &7799720356647673923
 Animator:
   serializedVersion: 7
@@ -3666,7 +3666,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.64
+  m_Radius: 2.67
   m_Center: {x: 0, y: 1.63, z: 0}
 --- !u!1 &8479561968893854363
 GameObject:

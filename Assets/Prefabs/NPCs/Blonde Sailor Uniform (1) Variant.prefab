@@ -190,7 +190,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2302689388623114671, guid: 61f14a3f33bc2784c8628e050fde33ce, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -46.13
+      value: -47.47
       objectReference: {fileID: 0}
     - target: {fileID: 2302689388623114671, guid: 61f14a3f33bc2784c8628e050fde33ce, type: 3}
       propertyPath: m_LocalPosition.y
@@ -198,7 +198,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2302689388623114671, guid: 61f14a3f33bc2784c8628e050fde33ce, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.79
+      value: -46.93
       objectReference: {fileID: 0}
     - target: {fileID: 2302689388623114671, guid: 61f14a3f33bc2784c8628e050fde33ce, type: 3}
       propertyPath: m_LocalRotation.w
@@ -206,15 +206,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2302689388623114671, guid: 61f14a3f33bc2784c8628e050fde33ce, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2302689388623114671, guid: 61f14a3f33bc2784c8628e050fde33ce, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2302689388623114671, guid: 61f14a3f33bc2784c8628e050fde33ce, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2302689388623114671, guid: 61f14a3f33bc2784c8628e050fde33ce, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -650,7 +650,7 @@ NavMeshAgent:
   m_Height: 2
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 2
+  m_ObstacleAvoidanceType: 1
 --- !u!135 &301225769998920693
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -670,5 +670,5 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.64
+  m_Radius: 2.67
   m_Center: {x: 0, y: 1.63, z: 0}

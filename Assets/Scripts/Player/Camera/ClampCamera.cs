@@ -3,7 +3,7 @@ using Unity.Cinemachine;
 
 namespace Scripts.Player.Camera
 {
-    // smoothly clamp upward rotation on cinemachine camera
+    // smoothly clamp upward _laseRotation on cinemachine camera
     [DisallowMultipleComponent]
     public class ClampCamera : CinemachineExtension
     {

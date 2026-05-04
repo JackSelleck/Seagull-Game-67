@@ -82,10 +82,10 @@ namespace Scripts.Player
 
         private void FlightMovementMode()
         {
-            // Get correct flight value based on if in flap or glide mode
+            // Get correct flight values based on current flight mode
             float verticalRot = _isGliding ? _playerStats.glideModeVerticalRot : _playerStats.flapModeVerticalRot;
             float horizontalRot = _isGliding ? _playerStats.glideModeHorizontalRot : _playerStats.flapModeHorizontalRot;
-            float gravity = _isGliding ? _playerStats.glidingModeGravity : _playerStats.flapModeGravity;
+            float gravity = _forceFlatFlight ? 0 : _isGliding ? _playerStats.glidingModeGravity : _playerStats.flapModeGravity;
             float maxBankAngle = _forceFlatFlight ? 25f : _playerStats.maxBankAngle;
 
             float moveForce;
@@ -99,8 +99,6 @@ namespace Scripts.Player
                 moveForce = _playerStats.flapModeForce;
             }            
 
-            // float pitch
-            // pitch = -_moveInput.y * verticalRot * Time.deltaTime;
             float pitch = _moveInput.y * verticalRot * Time.deltaTime;
             float yaw = _moveInput.x * horizontalRot * Time.deltaTime;
             transform.Rotate(pitch, yaw, 0, Space.Self);
@@ -128,7 +126,7 @@ namespace Scripts.Player
             }
             else if (_forceFlatFlight) 
             {
-                // limit downward rotation
+                // limit downward _laseRotation
                 Vector3 euler = transform.eulerAngles;
                 // Normalise euler angles to be -180/180, rather than 0-360 to simplify down lock
                 float normalisedPitch = transform.rotation.eulerAngles.x;

@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 928144758797629569}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071065, z: -0, w: 0.7071072}
-  m_LocalPosition: {x: 2.95, y: -2.19, z: -1.214}
+  m_LocalPosition: {x: 2.95, y: -2.079, z: -1.21}
   m_LocalScale: {x: 1, y: 2.030829, z: -0.010528999}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -49,8 +49,8 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 928144758797629569}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
@@ -113,7 +113,7 @@ Transform:
   m_GameObject: {fileID: 2595343942978161877}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.70710677, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 2.95, y: -2.19, z: -1.214}
+  m_LocalPosition: {x: 2.95, y: -2.079, z: -1.21}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -135,8 +135,8 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2595343942978161877}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
@@ -253,7 +253,7 @@ Transform:
   m_GameObject: {fileID: 4254565621566325090}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.95, y: -2.19, z: -1.214}
+  m_LocalPosition: {x: 2.95, y: -2.079, z: -1.21}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -275,8 +275,8 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4254565621566325090}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
@@ -322,7 +322,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8560934144612610550}
   m_Layer: 0
-  m_Name: LazerTarget
+  m_Name: LazerRotationParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -371,7 +371,7 @@ Transform:
   m_GameObject: {fileID: 4605794636563410553}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.95, y: -2.19, z: -1.214}
+  m_LocalPosition: {x: 2.95, y: -2.079, z: -1.21}
   m_LocalScale: {x: 1, y: 2.030829, z: -0.010529}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -393,8 +393,8 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4605794636563410553}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
@@ -439,8 +439,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4520908414751111662}
-  - component: {fileID: 3386211169792405594}
   - component: {fileID: 4940918464934149128}
+  - component: {fileID: 546349786798229576}
   m_Layer: 0
   m_Name: Parent
   m_TagString: Untagged
@@ -457,8 +457,8 @@ Transform:
   m_GameObject: {fileID: 6170291996918340933}
   serializedVersion: 2
   m_LocalRotation: {x: 0.38268322, y: -0, z: -0, w: 0.9238796}
-  m_LocalPosition: {x: -81.59045, y: -124.1, z: -70.5}
-  m_LocalScale: {x: 8.6898, y: 56.308075, z: 8.6898}
+  m_LocalPosition: {x: -81.6, y: -68.2, z: -14.6}
+  m_LocalScale: {x: 8.6898, y: 133.6, z: 8.6898}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7642035524782892711}
@@ -467,22 +467,6 @@ Transform:
   - {fileID: 5707103573310616253}
   m_Father: {fileID: 2157489004555815064}
   m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
---- !u!114 &3386211169792405594
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6170291996918340933}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e89684e3fcd53394599e944187986844, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 5
-  lazer: {fileID: 8560934144612610550}
-  laserSpeed: 0.67
-  rotation: {x: 30, y: 60, z: 90}
 --- !u!136 &4940918464934149128
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -498,7 +482,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -506,6 +490,19 @@ CapsuleCollider:
   m_Height: 2.149129
   m_Direction: 1
   m_Center: {x: 2.94, y: -2.1388457, z: -1.24}
+--- !u!114 &546349786798229576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6170291996918340933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f3c8d60c4a950c499877b49a0ee4836, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentEnemy: {fileID: 5538858255755100481}
 --- !u!1001 &2463272543077341162
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -532,7 +529,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9834b72059916224dae3db8e3e89a3b0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9834b72059916224dae3db8e3e89a3b0, type: 3}
       propertyPath: m_LocalPosition.z
@@ -652,10 +649,73 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9834b72059916224dae3db8e3e89a3b0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8560934144612610550}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9834b72059916224dae3db8e3e89a3b0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5538858255755100481}
+    - targetCorrespondingSourceObject: {fileID: 6763903703500657205, guid: 9834b72059916224dae3db8e3e89a3b0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5248662325478815727}
   m_SourcePrefab: {fileID: 100100000, guid: 9834b72059916224dae3db8e3e89a3b0, type: 3}
 --- !u!4 &2712842832416370689 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9834b72059916224dae3db8e3e89a3b0, type: 3}
   m_PrefabInstance: {fileID: 2463272543077341162}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &3381680512427109051 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 9834b72059916224dae3db8e3e89a3b0, type: 3}
+  m_PrefabInstance: {fileID: 2463272543077341162}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5538858255755100481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3381680512427109051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e89684e3fcd53394599e944187986844, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 5
+  _points:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  _laseRotation: {x: 30, y: 60, z: 90}
+  _laserSpeed: 0.2
+  _lowerHeight: 100
+  _raiseHeight: 0
+  _lookPos: {fileID: 0}
+  _godzilla: {fileID: 2712842832416370689}
+  _laserRotationParent: {fileID: 8560934144612610550}
+--- !u!1 &9219286008259020255 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6763903703500657205, guid: 9834b72059916224dae3db8e3e89a3b0, type: 3}
+  m_PrefabInstance: {fileID: 2463272543077341162}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &5248662325478815727
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9219286008259020255}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}

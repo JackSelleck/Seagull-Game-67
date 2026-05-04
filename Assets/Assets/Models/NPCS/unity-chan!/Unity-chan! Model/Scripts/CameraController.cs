@@ -5,7 +5,7 @@
 //https://twitter.com/TAK_EMI
 //
 //Revised by N.Kobayashi 2014/5/15 
-//Change : To prevent rotation flips on XY plane, use Quaternion in cameraRotate()
+//Change : To prevent _laseRotation flips on XY plane, use Quaternion in cameraRotate()
 //Change : Add the instrustion window
 //Change : Add the operation for Mac
 //
@@ -160,7 +160,7 @@ namespace UnityChan
 
 		public void cameraRotate(Vector3 eulerAngle)
 		{
-			//Use Quaternion to prevent rotation flips on XY plane
+			//Use Quaternion to prevent _laseRotation flips on XY plane
 			Quaternion q = Quaternion.identity;
  
 			Transform focusTrans = this.focusObj.transform;

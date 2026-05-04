@@ -118,7 +118,7 @@ namespace UnityChan
 			Vector3 aimVector = trs.TransformDirection (boneAxis);
 			Quaternion aimRotation = Quaternion.FromToRotation (aimVector, currTipPos - trs.position);
 			//original
-			//trs.rotation = aimRotation * trs.rotation;
+			//trs._laseRotation = aimRotation * trs._laseRotation;
 			//Kobayahsi:Lerp with mixWeight
 			Quaternion secondaryRotation = aimRotation * trs.rotation;
 			trs.rotation = Quaternion.Lerp (org.rotation, secondaryRotation, managerRef.dynamicRatio);

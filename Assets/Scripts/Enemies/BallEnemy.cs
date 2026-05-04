@@ -17,8 +17,6 @@ namespace Scripts.Enemies
         private int _currentIndex = 0;
         private float _moveDuration = 1f;
         private float _time = 0f;
-        protected override void SlowedEnemyUpdate() { }
-        protected override void OnPlayerHit(PlayerHealth player) { }
 
         private void Awake()
         {
@@ -34,7 +32,7 @@ namespace Scripts.Enemies
                 return;
             }
 
-            SetupNextSegment(_currentIndex);
+            NextLocation(_currentIndex);
         }
 
         private void FixedUpdate()
@@ -55,7 +53,7 @@ namespace Scripts.Enemies
             if (t >= 1f)
             {
                 _rb.MovePosition(_end);
-                SetupNextSegment(_currentIndex++);
+                NextLocation(_currentIndex++);
                 transform.localScale = new Vector3(transform.localScale.x, 2.67f, transform.localScale.z);
                 return;
             }
@@ -69,7 +67,7 @@ namespace Scripts.Enemies
             _rb.MovePosition(pos);
         }
 
-        private void SetupNextSegment(int index)
+        private void NextLocation(int index)
         {
             _time = 0f;
 

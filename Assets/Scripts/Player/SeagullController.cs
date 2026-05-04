@@ -103,14 +103,18 @@ namespace Scripts.Player
             float yaw = _moveInput.x * horizontalRot * Time.deltaTime;
             transform.Rotate(pitch, yaw, 0, Space.Self);
 
+            Vector3 velocity = _rb.linearVelocity;
+            Vector3 euler = transform.eulerAngles;
+
+            // Movement
             _rb.AddRelativeForce(Vector3.forward * moveForce, ForceMode.Acceleration);
             _rb.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
-            _anim.SetFloat(PlayerAnimHash.Speed, _rb.linearVelocity.magnitude);
+            _anim.SetFloat(PlayerAnimHash.Speed, velocity.magnitude);
 
             // Gull z rotation
             // also gradually resets the Z-rotation so the gull doesnt get stuck upside down or to the side
             float rollAngle = -_moveInput.x * maxBankAngle; // how far the gull should rotate
-            Quaternion targetRotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, rollAngle);
+            Quaternion targetRotation = Quaternion.Euler(euler.x, euler.y, rollAngle);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 2f);
 
             if (FindFlightBlockings())
@@ -121,15 +125,15 @@ namespace Scripts.Player
                 // Makes the gull freak out and messes up your controls as response to hitting an obstacle
                 _rb.angularVelocity = new Vector3(transform.rotation.x, 90f, transform.rotation.z);
                 // Rotate to face the sky during freak out, helps ensure the player doesnt get stuck
-                Quaternion _navigationRotation = Quaternion.Euler(-90f, transform.eulerAngles.y, transform.eulerAngles.z);
+                Quaternion _navigationRotation = Quaternion.Euler(-90f, euler.y, euler.z);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, _navigationRotation, Time.deltaTime * 10000f);
             }
+            // Flight mode for when close to the floor
             else if (_forceFlatFlight) 
             {
-                // limit downward _laseRotation
-                Vector3 euler = transform.eulerAngles;
+                // limit downward rotation
                 // Normalise euler angles to be -180/180, rather than 0-360 to simplify down lock
-                float normalisedPitch = transform.rotation.eulerAngles.x;
+                float normalisedPitch = euler.x;
                 normalisedPitch = Mathf.DeltaAngle(0f, normalisedPitch);
                 if (normalisedPitch > 0f)
                 {
@@ -144,7 +148,6 @@ namespace Scripts.Player
 
                 if (_rb.linearVelocity.y < 0f)
                 {
-                    Vector3 velocity = _rb.linearVelocity;
                     _rb.linearVelocity = new Vector3(velocity.x, velocity.y * 0.85f, velocity.z);
                 }
             }
@@ -152,7 +155,6 @@ namespace Scripts.Player
         private bool FindFlightBlockings()
         {
             Vector3 origin = transform.position;
-            Vector3 globalUpwardDir = Vector3.up;
             Vector3 forwardDir = transform.forward;
             forwardDir.y = 0f;
             forwardDir.Normalize();
@@ -163,7 +165,7 @@ namespace Scripts.Player
             if (isBlocked && !forwardHit.collider.CompareTag(TagConstants.NPC) && !forwardHit.collider.CompareTag(TagConstants.NoGroundingZone))
             {
                 // check if there is space above
-                return _navigateOverObstacle = !Physics.Raycast(origin, globalUpwardDir, 100);
+                return _navigateOverObstacle = !Physics.Raycast(origin, Vector3.up, 100);
             }
             else
             {

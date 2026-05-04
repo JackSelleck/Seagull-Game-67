@@ -21,7 +21,7 @@ namespace Scripts.Enemies
         [SerializeField] private Transform _godzilla;
         [SerializeField] private Transform _laserRotationParent;
 
-        private bool isAttacking = false;
+        private bool isCurrentlyUp = false;
         private float moveTimer;
         private readonly float moveInterval = 60f;
         private int _currentIndex = 0;
@@ -36,7 +36,7 @@ namespace Scripts.Enemies
             _laserRotationParent.gameObject.SetActive(false);
 
             // If currently up then move down first
-            if (isAttacking)
+            if (isCurrentlyUp)
             {
                 Vector3 posi = _godzilla.position;
 
@@ -71,19 +71,21 @@ namespace Scripts.Enemies
 
             // Start laser once risen
             _laserRotationParent.gameObject.SetActive(true);
-            isAttacking = true;
+            isCurrentlyUp = true;
         }
 
         private void Update()
         {
+            // Move lazer around
             _laserRotationParent.Rotate(_laserSpeed * Time.deltaTime * _laseRotation);
 
+            // Move up and down to a new location every once in a while
             moveTimer += Time.deltaTime;
             if (moveTimer >= moveInterval)
             {
                 moveTimer = 0f;
                 StartCoroutine(MoveGodzilla());
-                isAttacking = false;
+                isCurrentlyUp = false;
             }
         }
     }

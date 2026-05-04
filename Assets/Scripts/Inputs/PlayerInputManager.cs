@@ -1,4 +1,3 @@
-using Scripts.Player;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;

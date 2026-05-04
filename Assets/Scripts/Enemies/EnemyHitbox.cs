@@ -10,7 +10,7 @@ namespace Scripts.Enemies
     public class EnemyHitbox : MonoBehaviour
     {
         [SerializeField] private Enemy parentEnemy;
-    
+        
         private void Awake()
         {
             if (parentEnemy == null)

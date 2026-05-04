@@ -12,6 +12,12 @@ namespace Scripts.Player
         [SerializeField] private Rigidbody _rb;
         [SerializeField] private CapsuleCollider _col;
 
+        // Cached values
+        private Vector3 velocity;
+        private Vector3 euler;
+        private Quaternion rotation;
+        private Vector3 position;
+
         // flat flight
         private bool _forceFlatFlight = false;
         private float _flatFlightMinY;
@@ -30,9 +36,14 @@ namespace Scripts.Player
                 _inputs = GetComponent<PlayerInputManager>();
         }
 
-        void FixedUpdate()
+        private void FixedUpdate()
         {
             _moveInput = _inputs.GetMovementDirection();
+
+            velocity = _rb.linearVelocity;
+            euler = transform.eulerAngles;
+            rotation = transform.rotation;
+            position = transform.position;
 
             if (_isGrounded)
             {
@@ -103,9 +114,6 @@ namespace Scripts.Player
             float yaw = _moveInput.x * horizontalRot * Time.deltaTime;
             transform.Rotate(pitch, yaw, 0, Space.Self);
 
-            Vector3 velocity = _rb.linearVelocity;
-            Vector3 euler = transform.eulerAngles;
-
             // Movement
             _rb.AddRelativeForce(Vector3.forward * moveForce, ForceMode.Acceleration);
             _rb.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
@@ -117,55 +125,67 @@ namespace Scripts.Player
             Quaternion targetRotation = Quaternion.Euler(euler.x, euler.y, rollAngle);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 2f);
 
+            // if flight blocker is found then call the response to having hit something
             if (FindFlightBlockings())
             {
-                // Makes the gull navigate over the obstacle
-                _rb.AddForce(10f * Vector3.up, ForceMode.Acceleration);
-                _rb.linearVelocity = new Vector3(Vector3.up.x, Vector3.up.y * 1.5f, Vector3.up.z);
-                // Makes the gull freak out and messes up your controls as response to hitting an obstacle
-                _rb.angularVelocity = new Vector3(transform.rotation.x, 90f, transform.rotation.z);
-                // Rotate to face the sky during freak out, helps ensure the player doesnt get stuck
-                Quaternion _navigationRotation = Quaternion.Euler(-90f, euler.y, euler.z);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, _navigationRotation, Time.deltaTime * 10000f);
+                NavigateOverObstacle();
             }
             // Flight mode for when close to the floor
             else if (_forceFlatFlight) 
             {
-                // limit downward rotation
-                // Normalise euler angles to be -180/180, rather than 0-360 to simplify down lock
-                float normalisedPitch = euler.x;
-                normalisedPitch = Mathf.DeltaAngle(0f, normalisedPitch);
-                if (normalisedPitch > 0f)
-                {
-                    transform.eulerAngles = new Vector3(0f, euler.y, euler.z);
-                    Vector3 newAngle = _rb.angularVelocity;
-                    if (newAngle.x > 0f) _rb.angularVelocity = new Vector3(0f, newAngle.y, newAngle.z);
-                }
-
-                // smoothly push seagull up so it dosent go too close to the ground
-                float dip = _flatFlightMinY - _rb.position.y;
-                _rb.AddForce(100f * Mathf.Max(dip, 0f) * Vector3.up, ForceMode.Acceleration);
-
-                if (_rb.linearVelocity.y < 0f)
-                {
-                    _rb.linearVelocity = new Vector3(velocity.x, velocity.y * 0.85f, velocity.z);
-                }
+                FlatFlightMode();
             }
         }
+
+        private void NavigateOverObstacle()
+        {
+            // Makes the gull navigate over the obstacle
+            _rb.AddForce(10f * Vector3.up, ForceMode.Acceleration);
+            _rb.linearVelocity = new Vector3(Vector3.up.x, Vector3.up.y * 1.5f, Vector3.up.z);
+            // Makes the gull freak out and messes up your controls as response to hitting an obstacle
+            _rb.angularVelocity = new Vector3(rotation.x, 90f, rotation.z);
+            // Rotate to face the sky during freak out, helps ensure the player doesnt get stuck
+            Quaternion _navigationRotation = Quaternion.Euler(-90f, euler.y, euler.z);
+            transform.rotation = Quaternion.RotateTowards(rotation, _navigationRotation, Time.deltaTime * 10000f);
+        }
+
+        private void FlatFlightMode()
+        {
+            // limit downward rotation
+            // Normalise euler angles to be -180/180, rather than 0-360 to simplify down lock
+            euler.x = Mathf.DeltaAngle(0f, euler.x);
+            if (euler.x > 0f)
+            {
+                transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, transform.eulerAngles.z);
+                Vector3 newAngle = _rb.angularVelocity;
+                if (newAngle.x > 0f) _rb.angularVelocity = new Vector3(0f, newAngle.y, newAngle.z);
+            }
+
+            // smoothly push seagull up so it dosent go too close to the ground
+            float dip = _flatFlightMinY - position.y;
+            _rb.AddForce(100f * Mathf.Max(dip, 0f) * Vector3.up, ForceMode.Acceleration);
+
+            if (_rb.linearVelocity.y < 0f)
+            {
+                _rb.linearVelocity = new Vector3(velocity.x, velocity.y * 0.85f, velocity.z);
+            }
+        }
+        #endregion
+
+        #region Movement variable helpers
         private bool FindFlightBlockings()
         {
-            Vector3 origin = transform.position;
             Vector3 forwardDir = transform.forward;
             forwardDir.y = 0f;
             forwardDir.Normalize();
 
             // check if there is an obstacle in front
-            bool isBlocked = Physics.Raycast(origin, forwardDir, out RaycastHit forwardHit, _playerStats.forwardBlockCheckDist);
+            bool isBlocked = Physics.Raycast(position, forwardDir, out RaycastHit forwardHit, _playerStats.forwardBlockCheckDist);
 
             if (isBlocked && !forwardHit.collider.CompareTag(TagConstants.NPC) && !forwardHit.collider.CompareTag(TagConstants.NoGroundingZone))
             {
                 // check if there is space above
-                return _navigateOverObstacle = !Physics.Raycast(origin, Vector3.up, 100);
+                return _navigateOverObstacle = !Physics.Raycast(position, Vector3.up, 100);
             }
             else
             {

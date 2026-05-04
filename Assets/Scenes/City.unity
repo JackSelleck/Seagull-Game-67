@@ -40164,7 +40164,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1467
   _range: 8.67
-  _spawnTime: 0.1
+  _spawnTime: 6.7
   _velocityInfluence: 2
   _cam: {fileID: 1970505541}
   _rb: {fileID: 719767524}

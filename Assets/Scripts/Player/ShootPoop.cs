@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Scripts.Player
 {
+    [DisallowMultipleComponent]
     public class ShootPoop : MonoBehaviour
     {
         [Header("Settings")]

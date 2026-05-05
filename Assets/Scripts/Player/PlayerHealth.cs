@@ -2,15 +2,16 @@ using UnityEngine;
 
 namespace Scripts.Player
 {
+    [DisallowMultipleComponent]
     public class PlayerHealth : MonoBehaviour
     {
-        private readonly int maxHealth = 100;
-        private int health;
-        public int Health { get => health; private set => health = Mathf.Max(0, value); }
+        private readonly int _maxHealth = 100;
+        private int _health;
+        public int Health { get => _health; private set => _health = Mathf.Max(0, value); }
 
         private void Awake()
         {
-            health = maxHealth;
+            _health = _maxHealth;
         }
         public void DecreaseHealth(int amount)
         {
@@ -18,14 +19,14 @@ namespace Scripts.Player
             {
                 Debug.LogError("Trying to decrease health by zero...");
             }
-            if (health == 0)
+            if (_health == 0)
             {
                 Debug.LogError("trying to decrease health when it is already at zero...");
             }
 
-            int prevHealth = health;
+            int prevHealth = _health;
             Health -= amount;
-            Debug.Log($"Decreased health from {prevHealth} to {health}");
+            Debug.Log($"Decreased health from {prevHealth} to {_health}");
         }
         public void IncreaseHealth(int amount)
         {
@@ -34,9 +35,9 @@ namespace Scripts.Player
                 Debug.LogError("Trying to increase health by zero...");
             }
 
-            int prevHealth = health;
+            int prevHealth = _health;
             Health += amount;
-            Debug.Log($"Increased health from {prevHealth} to {health}");
+            Debug.Log($"Increased health from {prevHealth} to {_health}");
         }
     }
 }

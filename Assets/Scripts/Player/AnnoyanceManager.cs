@@ -5,8 +5,8 @@ namespace Scripts.Player
     [DisallowMultipleComponent]
     public class AnnoyanceManager : MonoBehaviour
     {
-        private int annoyance;
-        public int Annoyance { get => annoyance; private set => annoyance = Mathf.Max(0, value); }
+        private int _annoyance;
+        public int Annoyance { get => _annoyance; private set => _annoyance = Mathf.Max(0, value); }
 
         public void IncreaseAnnoyance(int amount)
         {
@@ -15,9 +15,9 @@ namespace Scripts.Player
                 Debug.LogError("Trying to increase annoyance negative amount...");
             }
 
-            int prevAnnoyance = annoyance;
+            int prevAnnoyance = _annoyance;
             Annoyance += amount;
-            Debug.Log($"Increased annoyance from {prevAnnoyance} to {annoyance}");
+            Debug.Log($"Increased annoyance from {prevAnnoyance} to {_annoyance}");
         }
         public void DecreaseAnnoyance(int amount)
         {
@@ -26,9 +26,9 @@ namespace Scripts.Player
                 Debug.LogError("Trying to decrease annoyance positive amount...");
             }
 
-            int prevAnnoyance = annoyance;
+            int prevAnnoyance = _annoyance;
             Annoyance -= amount;
-            Debug.Log($"Increased annoyance from {prevAnnoyance} to {annoyance}");
+            Debug.Log($"Increased annoyance from {prevAnnoyance} to {_annoyance}");
         }
     }
 }

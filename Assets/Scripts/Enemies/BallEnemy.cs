@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Scripts.Enemies
 {
+    [DisallowMultipleComponent]
     public class BallEnemy : Enemy
     {
         [SerializeField] private Rigidbody _rb;

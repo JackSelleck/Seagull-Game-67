@@ -5,9 +5,9 @@ namespace Scripts.UI
     [DisallowMultipleComponent]
     public class UIManager : MonoBehaviour
     {
-        public CanvasGroup pauseMenu;
-        public CanvasGroup HUD;
-        public CanvasGroup stealFoodAction;
+        [SerializeField] private CanvasGroup pauseMenu;
+        [SerializeField] private CanvasGroup HUD;
+        [SerializeField] private CanvasGroup stealFoodAction;
 
         /// <summary>
         /// Set UI elements active or inactive

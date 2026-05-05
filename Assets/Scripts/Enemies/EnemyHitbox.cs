@@ -7,30 +7,31 @@ namespace Scripts.Enemies
     /// If an enemy has a collider which is not on the same object as the Enemy.cs,
     /// You can add this script to those colliders
     /// </summary>
+    [DisallowMultipleComponent]
     public class EnemyHitbox : MonoBehaviour
     {
-        [SerializeField] private Enemy parentEnemy;
+        [SerializeField] private Enemy _parentEnemy;
         
         private void Awake()
         {
-            if (parentEnemy == null)
+            if (_parentEnemy == null)
             {
-                parentEnemy = GetComponentInParent<Enemy>();
+                _parentEnemy = GetComponentInParent<Enemy>();
     
-                if (parentEnemy == null)
-                    Debug.LogWarning("EnemyHitbox.cs placed on an object with parent Enemy.cs...", this);
+                if (_parentEnemy == null)
+                    Debug.LogWarning("EnemyHitbox.cs placed on an object with no parent Enemy.cs...", this);
             }
         }
     
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.TryGetComponent(out PlayerHealth player))
-                parentEnemy.HandlePlayerCollision(player);
+                _parentEnemy.HandlePlayerCollision(player);
         }
         private void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.TryGetComponent(out PlayerHealth player))
-                parentEnemy.HandlePlayerCollision(player);
+                _parentEnemy.HandlePlayerCollision(player);
         }
     }
 }

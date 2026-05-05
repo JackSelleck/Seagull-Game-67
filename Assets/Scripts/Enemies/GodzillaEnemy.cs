@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 namespace Scripts.Enemies
 {
+    [DisallowMultipleComponent]
     public class GodzillaEnemy : Enemy
     {
         [Tooltip("Points the godzilla can move to")]

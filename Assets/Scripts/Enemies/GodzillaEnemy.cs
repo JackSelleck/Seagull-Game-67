@@ -31,6 +31,21 @@ namespace Scripts.Enemies
             StartCoroutine(MoveGodzilla());
         }
 
+        private void Update()
+        {
+            // Move lazer around
+            _laserRotationParent.Rotate(_laserSpeed * Time.deltaTime * _laseRotation);
+
+            // Move up and down to a new location every once in a while
+            moveTimer += Time.deltaTime;
+            if (moveTimer >= moveInterval)
+            {
+                moveTimer = 0f;
+                StartCoroutine(MoveGodzilla());
+                isCurrentlyUp = false;
+            }
+        }
+
         private IEnumerator MoveGodzilla()
         {
             _laserRotationParent.gameObject.SetActive(false);
@@ -72,21 +87,6 @@ namespace Scripts.Enemies
             // Start laser once risen
             _laserRotationParent.gameObject.SetActive(true);
             isCurrentlyUp = true;
-        }
-
-        private void Update()
-        {
-            // Move lazer around
-            _laserRotationParent.Rotate(_laserSpeed * Time.deltaTime * _laseRotation);
-
-            // Move up and down to a new location every once in a while
-            moveTimer += Time.deltaTime;
-            if (moveTimer >= moveInterval)
-            {
-                moveTimer = 0f;
-                StartCoroutine(MoveGodzilla());
-                isCurrentlyUp = false;
-            }
         }
     }
 }

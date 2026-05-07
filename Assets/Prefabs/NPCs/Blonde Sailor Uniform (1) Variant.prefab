@@ -630,8 +630,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10d5d21ea9be2214b8a90460a1415947, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 8005982020924750208}
-  groundPathfindingPositions: {fileID: 0}
+  _agent: {fileID: 8005982020924750208}
+  _groundPathfindingPositions: {fileID: 0}
 --- !u!195 &8005982020924750208
 NavMeshAgent:
   m_ObjectHideFlags: 0

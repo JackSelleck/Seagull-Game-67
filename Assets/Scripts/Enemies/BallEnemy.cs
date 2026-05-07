@@ -1,4 +1,3 @@
-using Scripts.Player;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -60,6 +59,7 @@ namespace Scripts.Enemies
             }
 
             Vector3 pos = Vector3.Lerp(_start, _end, t);
+
 
             float distance = Vector3.Distance(_start, _end);
             float height = Mathf.Sin(t * Mathf.PI) * _arcAmplifier * distance; 

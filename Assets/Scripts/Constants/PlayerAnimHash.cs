@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public struct PlayerAnimHash
+public readonly struct PlayerAnimHash
 {
     public static readonly int Speed = Animator.StringToHash("Speed");
     public static readonly int Moving = Animator.StringToHash("Moving");

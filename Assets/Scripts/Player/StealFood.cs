@@ -38,7 +38,6 @@ namespace Scripts.Player
                 _canSteal = true;
                 _uiManager.StealFoodActionActiveSwitch(true);
                 _annoyanceManager.IncreaseAnnoyance(1);
-                Debug.Log("brap");
             }
         }
         private void OnTriggerExit(Collider other)

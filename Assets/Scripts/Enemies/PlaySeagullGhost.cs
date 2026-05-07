@@ -44,16 +44,13 @@ namespace Scripts.Enemies
                 Vector3.Lerp(transform.position, frame.Position, Time.deltaTime * (1f / _recordGhost.recordInterval)),
                 Quaternion.Lerp(transform.rotation, frame.Rotation, Time.deltaTime * (1f / _recordGhost.recordInterval)));
 
-            _animator.Play(frame.animStateHash, 0, frame.normalizedTime);
-
             // play animations
             if (frame.IsMoving != _prevMoving) { _animator.SetBool(PlayerAnimHash.Moving, frame.IsMoving); _prevMoving = frame.IsMoving; }
             if (frame.IsGrounded != _prevGrounded) { _animator.SetBool(PlayerAnimHash.Grounded, frame.IsGrounded); _prevGrounded = frame.IsGrounded; }
             if (frame.IsGliding != _prevGlide) { _animator.SetBool(PlayerAnimHash.Glide, frame.IsGliding); _prevGlide = frame.IsGliding; }
             if (frame.IsIdle != _prevIdle) { _animator.SetBool(PlayerAnimHash.Idle, frame.IsIdle); _prevIdle = frame.IsIdle; }
             if (frame.IsSprinting != _prevSprinting) { _animator.SetBool(PlayerAnimHash.SprintButton, frame.IsSprinting); _prevSprinting = frame.IsSprinting; }
-
-            _animator.Update(0f);
+            _animator.Play(frame.animStateHash, 0, frame.normalizedTime);
         }
     }
 } 

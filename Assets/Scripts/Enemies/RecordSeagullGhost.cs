@@ -73,12 +73,12 @@ namespace Scripts.Enemies
     // Struct of all the variables needed to mimic player movement in ghosts
     public struct GhostFrame
     {
-        public float PosX, PosY, PosZ;
-        public float RotX, RotY, RotZ, RotW;
-        public float Time;
+        public Vector3 Position;
+        public Quaternion Rotation;
 
-        public int animStateHash;
+        public float Time;
         public float normalizedTime;
+        public int animStateHash;
 
         // animator parameters
         public bool IsMoving;
@@ -86,17 +86,5 @@ namespace Scripts.Enemies
         public bool IsGliding;
         public bool IsIdle;
         public bool IsSprinting;
-
-        public Vector3 Position
-        {
-            readonly get => new(PosX, PosY, PosZ);
-            set { PosX = value.x; PosY = value.y; PosZ = value.z; }
-        }
-
-        public Quaternion Rotation
-        {
-            readonly get => new(RotX, RotY, RotZ, RotW);
-            set { RotX = value.x; RotY = value.y; RotZ = value.z; RotW = value.w; }
-        }
     }
 }

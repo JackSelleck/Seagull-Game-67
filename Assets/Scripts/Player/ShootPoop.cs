@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Scripts.Player
@@ -15,6 +16,7 @@ namespace Scripts.Player
         [Space]
         [Header("References")]
         [SerializeField] private UnityEngine.Camera _cam;
+        [SerializeField] private List<Transform> _poopPool;
         [SerializeField] private Rigidbody _rb;
         [SerializeField] private GameObject _poopSprite;
 
@@ -45,15 +47,28 @@ namespace Scripts.Player
             if (Physics.Raycast(transform.position, rayDir, out hit, _range, _layerMask, QueryTriggerInteraction.Ignore))
             {
                 // spawn poop sprite at hit point
-                GameObject PoopSprite = Instantiate(
+                // use pooled poops first
+                if (_poopPool.Count > 0)
+                {
+                    _poopPool[0].position = hit.point + hit.normal * 0.01f;
+                    _poopPool[0].rotation = Quaternion.LookRotation(hit.normal);
+                    _poopPool[0].parent = hit.collider.transform;
+                    _poopPool[0].Rotate(0f, 0f, Random.Range(0f, 360f));
+                    _poopPool.RemoveAt(0);
+                }
+                else // spawn in poops if pool is exhausted
+                {
+                    GameObject PoopSprite = Instantiate(
                     original: _poopSprite,
                     position: hit.point + hit.normal * 0.01f,
                     rotation: Quaternion.LookRotation(hit.normal),
                     parent: hit.collider.transform
                     );
 
-                // random rotation to look different from eachover
-                PoopSprite.transform.Rotate(0f, 0f, Random.Range(0f, 360f));
+                    // random rotation to look different from eachover
+                    PoopSprite.transform.Rotate(0f, 0f, Random.Range(0f, 360f));
+                }
+
             }
         }
     }

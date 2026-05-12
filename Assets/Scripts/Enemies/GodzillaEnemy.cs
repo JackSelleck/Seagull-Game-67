@@ -7,27 +7,30 @@ namespace Scripts.Enemies
     [DisallowMultipleComponent]
     public class GodzillaEnemy : Enemy
     {
-        [Tooltip("Points the godzilla can move to")]
-        [SerializeField] private List<Transform> _points;
         [SerializeField] private Vector3 _laseRotation = new(30f, 60f, 90f);
         [SerializeField] private float _laserSpeed = 0.2f;
         [Tooltip("How low the godzilla starts and lowers to")]
         [SerializeField] private float _lowerHeight = -100f;
         [Tooltip("How high the godzilla rises")]
         [SerializeField] private float _raiseHeight = 0f;
-        [Tooltip("Point for godzilla to be looking at")]
-        [SerializeField] private Transform _lookPos;
         [Space]
         [SerializeField] private Transform _godzilla;
         [SerializeField] private Transform _laserRotationParent;
+
+        // Point for godzilla to be looking at
+        private Transform _lookPos;
+        // Points the godzilla can move to
+        private List<Transform> _points;
 
         private bool isCurrentlyUp = false;
         private float moveTimer;
         private readonly float moveInterval = 60f;
         private int _currentIndex = 0;
 
-        private void Start()
+        private void OnEnable()
         {
+            _points = GetComponentInParent<EnemyPositionsHolder>().godzillaEnemyPositions;
+            _lookPos = GetComponentInParent<EnemyPositionsHolder>().godzillaEnemyLookPos;
             StartCoroutine(MoveGodzilla());
         }
 

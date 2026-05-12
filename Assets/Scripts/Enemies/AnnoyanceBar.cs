@@ -27,7 +27,7 @@ public class AnnoyanceBar : MonoBehaviour
 
     private IEnumerator WaitThenUnfillBar(float fullAmount)
     {
-        yield return new WaitForSeconds(0.37f);
+        yield return new WaitForSeconds(0.471f);
         _scrollBar.fillAmount = 0;
         _annoyanceText.text = "Annoyance: " + fullAmount;
     }

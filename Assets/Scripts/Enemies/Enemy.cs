@@ -9,8 +9,16 @@ namespace Scripts.Enemies
         [SerializeField] protected int _damage;
         private float _timer;
         private readonly float _interval = 0.04f;
+        public Vector3 SpawnPosition;
 
+        /// <summary>
+        /// Slow update method to use, in the case that a constant update can be avoided for performance
+        /// </summary>
         protected virtual void SlowedEnemyUpdate() { }
+
+        /// <summary>
+        /// To apply custom logic upon hitting the player
+        /// </summary>
         protected virtual void OnPlayerHit(PlayerHealth player) { }
 
         private void Update()

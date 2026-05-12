@@ -1,4 +1,3 @@
-using Scripts.Player;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,17 +6,48 @@ namespace Scripts.Enemies
     [DisallowMultipleComponent]
     public class SpawnEnemy : MonoBehaviour
     {
+        [SerializeField] private Transform _enemyPositionsHolder;
+
         [SerializeField] private List<GameObject> _easyGroup = new();
         [SerializeField] private List<GameObject> _normalGroup = new();
         [SerializeField] private List<GameObject> _hardGroup = new();
 
+        private readonly Queue<GameObject> _easyPool = new();
+        private readonly Queue<GameObject> _normalPool = new();
+        private readonly Queue<GameObject> _hardPool = new();
+
         [SerializeField] private float _scaling = 100f;
+
+        private const int PoolSize = 5;
+
+        private void Awake()
+        {
+            if (_enemyPositionsHolder == null)
+            {
+                _enemyPositionsHolder = FindFirstObjectByType<EnemyPositionsHolder>().transform;
+            }
+        }
+        private void Start()
+        {
+            LoadEnemyPool(_easyGroup, _easyPool);
+            LoadEnemyPool(_normalGroup, _normalPool);
+            LoadEnemyPool(_hardGroup, _hardPool);
+        }
+        private void LoadEnemyPool(List<GameObject> group, Queue<GameObject> pool)
+        {
+            for (int i = 0; i < PoolSize; i++)
+            {
+                GameObject prefab = group[Random.Range(0, group.Count)];
+                GameObject instance = Instantiate(prefab, _enemyPositionsHolder);
+                instance.SetActive(false);
+                pool.Enqueue(instance);
+            }
+        }
 
         public void OnAnnoyanceIncrease(float annoyanceAmount)
         {
             SpawnEnemyFromAnnoyance(annoyanceAmount);
         }
-
         private void SpawnEnemyFromAnnoyance(float annoyanceAmount)
         {
             float annoyanceScaling = Mathf.Clamp01(annoyanceAmount / _scaling);
@@ -30,24 +60,41 @@ namespace Scripts.Enemies
             float chance = Random.Range(0f, total);
 
             if (chance < easyChance)
-                SpawnEasyEnemy();
+                SpawnEnemyFromPool(_easyGroup, _easyPool);
             else if (chance < easyChance + normalChance)
-                SpawnNormalEnemy();
+                SpawnEnemyFromPool(_normalGroup, _normalPool);
             else
-                SpawnHardEnemy();
+                SpawnEnemyFromPool(_hardGroup, _hardPool);
         }
 
-        private void SpawnEasyEnemy()
+        private void SpawnEnemyFromPool(List<GameObject> group, Queue<GameObject> pool)
         {
+            SpawnFromPool(group, pool);
             Debug.Log("EasyEnemySpawned");
         }
-        private void SpawnNormalEnemy()
+
+        private void SpawnFromPool(List<GameObject> group, Queue<GameObject> pool)
         {
-            Debug.Log("NormalEnemySpawned");
+            GameObject prefab = group[Random.Range(0, group.Count)];
+
+            GameObject enemy;
+
+            if (pool.Count > 0)
+            {
+                enemy = pool.Dequeue();
+            }
+            else // Instantiate new enemy if pool is exhausted
+            {
+                enemy = Instantiate(prefab, _enemyPositionsHolder);
+            }
+
+            enemy.SetActive(true);
         }
-        private void SpawnHardEnemy()
+
+        public void ReturnToPool(GameObject enemy, Queue<GameObject> pool)
         {
-            Debug.Log("HardEnemySpawned");
+            enemy.SetActive(false);
+            pool.Enqueue(enemy);
         }
     }
 }

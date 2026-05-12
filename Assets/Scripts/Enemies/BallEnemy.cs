@@ -24,6 +24,12 @@ namespace Scripts.Enemies
                 _rb = GetComponent<Rigidbody>();   
         }
 
+        private void OnEnable()
+        {
+            _points = GetComponentInParent<EnemyPositionsHolder>().ballEnemyPositions;
+            NextLocation(_currentIndex);
+        }
+
         private void Start()
         {
             if (_points.Count < 0)
@@ -31,8 +37,6 @@ namespace Scripts.Enemies
                 Debug.Log("Ball enemy has no assigned positions!");
                 return;
             }
-
-            NextLocation(_currentIndex);
         }
 
         private void FixedUpdate()

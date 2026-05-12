@@ -14,7 +14,7 @@ namespace Scripts.Player
         {
             if (_uiManager == null)
             {
-                _uiManager = GetComponent<UIManager>();
+                _uiManager = GameObject.FindWithTag(TagConstants.MainCanvas).GetComponent<UIManager>();
 
                 if (_uiManager == null)
                 {
@@ -37,7 +37,7 @@ namespace Scripts.Player
             {
                 _canSteal = true;
                 _uiManager.StealFoodActionActiveSwitch(true);
-                _annoyanceManager.IncreaseAnnoyance(1);
+                _annoyanceManager.IncreaseAnnoyance(5);
             }
         }
         private void OnTriggerExit(Collider other)

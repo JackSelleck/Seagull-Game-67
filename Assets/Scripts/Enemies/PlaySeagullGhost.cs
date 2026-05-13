@@ -4,9 +4,9 @@ using UnityEngine;
 namespace Scripts.Enemies
 {
     [DisallowMultipleComponent]
-    public class PlaySeagullGhost : MonoBehaviour
+    public class PlaySeagullGhost : Enemy
     {
-        [SerializeField] private RecordSeagullGhost _recordGhost;
+        private RecordSeagullGhost _recordGhost;
         [SerializeField] private Animator _animator;
         [Tooltip("How many seconds behind the ghost follows")]
         [SerializeField] private float _delaySeconds = 3.67f;
@@ -19,13 +19,25 @@ namespace Scripts.Enemies
         private bool _prevIdle;
         private bool _prevSprinting;
 
+        private void Start()
+        {
+            _delaySeconds = Random.Range(2f, 10f);
+            _recordGhost = GetComponentInParent<EnemyPositionsHolder>().recordSeagullGhost;
+            if (_recordGhost == null )
+            {
+                Debug.LogError("Couldnt find record ghost in " + transform.parent.name);
+            }
+            _recordGhost._ghostPlayback.Add(this);
+            _recordGhost.PlayNewGhost(this);
+        }
+
         public void Play(List<GhostFrame> ghostData)
         {
             _playing = true;
             _animator.speed = 0f;
         }
 
-        void Update()
+        private void Update()
         {
             if (!_playing) return;
             if (_recordGhost.Frames.Count == 0) return;

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace Scripts.Enemies
@@ -7,6 +8,7 @@ namespace Scripts.Enemies
     public class SpawnEnemy : MonoBehaviour
     {
         [SerializeField] private Transform _enemyPositionsHolder;
+        [SerializeField] private TextMeshProUGUI _enemyAnnouncementText;
 
         [SerializeField] private List<GameObject> _easyGroup = new();
         [SerializeField] private List<GameObject> _normalGroup = new();
@@ -18,7 +20,8 @@ namespace Scripts.Enemies
 
         [SerializeField] private float _scaling = 100f;
 
-        private const int PoolSize = 5;
+
+        private const int PoolSize = 20;
 
         private void Awake()
         {
@@ -88,6 +91,7 @@ namespace Scripts.Enemies
                 enemy = Instantiate(prefab, _enemyPositionsHolder);
             }
 
+            _enemyAnnouncementText.text = enemy.GetComponent<Enemy>().displayName + "!!!";
             enemy.SetActive(true);
         }
 

@@ -21,7 +21,7 @@ namespace Scripts.Player
             }
             if (_health == 0)
             {
-                Debug.LogError("trying to decrease health when it is already at zero...");
+                Debug.LogWarning("trying to decrease health when it is already at zero...");
             }
 
             int prevHealth = _health;

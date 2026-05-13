@@ -6,10 +6,13 @@ namespace Scripts.Enemies
     [DisallowMultipleComponent]
     public abstract class Enemy : MonoBehaviour
     {
+        [SerializeField] private string _displayName;
+        public string displayName { get => _displayName; set => _displayName = value; }
+
         [SerializeField] protected int _damage;
+
         private float _timer;
         private readonly float _interval = 0.04f;
-        public Vector3 SpawnPosition;
 
         /// <summary>
         /// Slow update method to use, in the case that a constant update can be avoided for performance

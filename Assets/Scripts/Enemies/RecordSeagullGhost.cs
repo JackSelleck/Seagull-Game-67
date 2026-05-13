@@ -6,9 +6,9 @@ namespace Scripts.Enemies
     [DisallowMultipleComponent]
     public class RecordSeagullGhost : MonoBehaviour
     {
-        [SerializeField] private List<PlaySeagullGhost> _ghostPlayback;
-        [SerializeField] private Animator _animator;
+        public List<PlaySeagullGhost> _ghostPlayback;
         public float recordInterval = 0.05f;
+        [SerializeField] private Animator _animator;
 
         public float CurrentTime { get; private set; }
         public IReadOnlyList<GhostFrame> Frames => _frames;
@@ -25,6 +25,11 @@ namespace Scripts.Enemies
             {
                 ghost.Play(_frames);
             }
+        }
+
+        public void PlayNewGhost(PlaySeagullGhost ghost)
+        {
+            ghost.Play(_frames);
         }
 
         public void StartRecording()

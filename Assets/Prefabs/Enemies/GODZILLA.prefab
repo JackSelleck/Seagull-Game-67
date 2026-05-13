@@ -617,7 +617,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9834b72059916224dae3db8e3e89a3b0, type: 3}
       propertyPath: m_Name
-      value: Hanna Barbera Godzilla
+      value: GODZILLA
       objectReference: {fileID: 0}
     - target: {fileID: 5320690707112686825, guid: 9834b72059916224dae3db8e3e89a3b0, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -676,16 +676,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e89684e3fcd53394599e944187986844, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _displayName: GODZILLA
   _damage: 5
-  _points:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   _laseRotation: {x: 30, y: 60, z: 90}
   _laserSpeed: 0.2
   _lowerHeight: 100
   _raiseHeight: 0
-  _lookPos: {fileID: 0}
   _godzilla: {fileID: 2712842832416370689}
   _laserRotationParent: {fileID: 8560934144612610550}

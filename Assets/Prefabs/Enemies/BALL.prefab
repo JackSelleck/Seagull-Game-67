@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 270129066608407072}
   - component: {fileID: 2539970936952600198}
   m_Layer: 0
-  m_Name: Ball Enemy
+  m_Name: BALL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 026cce3ec58921142b0831038e066c70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _displayName: THE BALL
   _damage: 10
   _rb: {fileID: 1392060093676587909}
   _points:

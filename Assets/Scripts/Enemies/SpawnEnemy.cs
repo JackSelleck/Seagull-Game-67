@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -14,12 +15,13 @@ namespace Scripts.Enemies
         [SerializeField] private List<GameObject> _normalGroup = new();
         [SerializeField] private List<GameObject> _hardGroup = new();
 
+        [SerializeField] private float _scaling = 100f;
+
+        private Coroutine _coroutine;
+
         private readonly Queue<GameObject> _easyPool = new();
         private readonly Queue<GameObject> _normalPool = new();
         private readonly Queue<GameObject> _hardPool = new();
-
-        [SerializeField] private float _scaling = 100f;
-
 
         private const int PoolSize = 20;
 
@@ -91,8 +93,15 @@ namespace Scripts.Enemies
                 enemy = Instantiate(prefab, _enemyPositionsHolder);
             }
 
-            _enemyAnnouncementText.text = enemy.GetComponent<Enemy>().displayName + "!!!";
+            _coroutine = StartCoroutine(DisplayText(enemy));
             enemy.SetActive(true);
+        }
+
+        private IEnumerator DisplayText(GameObject enemy)
+        {
+            _enemyAnnouncementText.text = enemy.GetComponent<Enemy>().displayName + "!!!";
+            yield return new WaitForSeconds(1f);
+            _enemyAnnouncementText.text = null;
         }
 
         public void ReturnToPool(GameObject enemy, Queue<GameObject> pool)

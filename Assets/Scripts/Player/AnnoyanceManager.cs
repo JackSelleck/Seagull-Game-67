@@ -1,4 +1,3 @@
-using Scripts.Enemies;
 using UnityEngine;
 
 namespace Scripts.Player
@@ -10,7 +9,6 @@ namespace Scripts.Player
         public float Annoyance { get => _annoyance; private set => _annoyance = Mathf.Max(0, value); }
 
         [SerializeField] private AnnoyanceBar _annoyanceBar;
-        [SerializeField] private SpawnEnemy _spawnEnemy;
 
         private void Awake()
         {
@@ -21,16 +19,6 @@ namespace Scripts.Player
                 if (_annoyanceBar == null)
                 {
                     Debug.LogError("AnnoyanceManager.cs Unable to find Canvas prefab!");
-                }
-            }
-
-            if (_spawnEnemy == null)
-            {
-                _spawnEnemy = FindFirstObjectByType<SpawnEnemy>();
-
-                if (_annoyanceBar == null)
-                {
-                    Debug.LogError("AnnoyanceManager.cs Unable to find Spawn Enemy prefab!");
                 }
             }
         }
@@ -45,7 +33,7 @@ namespace Scripts.Player
             float prevAnnoyance = _annoyance;
             Annoyance += increaseAmount;
             _annoyanceBar.OnAnnoyanceIncrease(increaseAmount, Annoyance);
-            _spawnEnemy.OnAnnoyanceIncrease(Annoyance);
+
             Debug.Log($"Increased annoyance from {prevAnnoyance} to {_annoyance}");
         }
 

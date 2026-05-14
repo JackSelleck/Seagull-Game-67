@@ -15,5 +15,9 @@ namespace Scripts.Enemies
         [Header("Godzilla")]
         public List<Transform> godzillaEnemyPositions = new();
         public Transform godzillaEnemyLookPos;
+        [Header("Grid")]
+        public List<Transform> gridPositions = new();
+        [Header("Missles")]
+        public List<Transform> misslePositions = new();
     }
 }

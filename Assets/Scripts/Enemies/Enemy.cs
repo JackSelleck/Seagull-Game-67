@@ -8,6 +8,8 @@ namespace Scripts.Enemies
     {
         [SerializeField] private string _displayName;
         public string displayName { get => _displayName; set => _displayName = value; }
+        protected virtual bool OverrideOnCollision => false;
+        protected virtual bool OverrideOnTrigger => false;
 
         [SerializeField] protected int _damage;
 
@@ -38,6 +40,7 @@ namespace Scripts.Enemies
         {
             if (other.gameObject.TryGetComponent(out PlayerHealth player))
             {
+                if (OverrideOnTrigger) return;
                 HandlePlayerCollision(player);
             }
         }
@@ -45,6 +48,7 @@ namespace Scripts.Enemies
         {
             if (collision.gameObject.TryGetComponent(out PlayerHealth player))
             {
+                if (OverrideOnCollision) return;
                 HandlePlayerCollision(player);
             }
         }

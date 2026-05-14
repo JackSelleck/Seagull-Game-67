@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _displayName: THE BALL
-  _damage: 10
+  _damage: 50
   _rb: {fileID: 1392060093676587909}
   _points:
   - {fileID: 0}

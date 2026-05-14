@@ -151,6 +151,11 @@ namespace Scripts.Player
 
         private void FlatFlightMode()
         {
+            // new caches needed because the others are stale by the time they reach here
+            Vector3 euler = transform.eulerAngles;
+            Vector3 position = _rb.position;
+            Vector3 velocity = _rb.linearVelocity;
+
             // limit downward rotation
             // Normalise euler angles to be -180/180, rather than 0-360 to simplify down lock
             euler.x = Mathf.DeltaAngle(0f, euler.x);

@@ -677,7 +677,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _displayName: GODZILLA
-  _damage: 5
+  _damage: 50
   _laseRotation: {x: 30, y: 60, z: 90}
   _laserSpeed: 0.2
   _lowerHeight: 100

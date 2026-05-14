@@ -1339,8 +1339,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _displayName: THE GHOST OF SEAGULL PAST
-  _damage: 20
-  _recordGhost: {fileID: 0}
+  _damage: 35
   _animator: {fileID: 2181809210763741345}
   _delaySeconds: 3.67
 --- !u!136 &5301323004387700523

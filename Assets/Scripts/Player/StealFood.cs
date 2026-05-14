@@ -36,7 +36,7 @@ namespace Scripts.Player
             if (other.CompareTag("NPC"))
             {
                 _canSteal = true;
-                _uiManager.StealFoodActionActiveSwitch(true);
+                _uiManager.StealFoodActionActiveSetter(true);
                 _annoyanceManager.IncreaseAnnoyance(5);
             }
         }
@@ -45,7 +45,7 @@ namespace Scripts.Player
             if (other.CompareTag(TagConstants.NPC))
             {
                 _canSteal = false;
-                _uiManager.StealFoodActionActiveSwitch(false);
+                _uiManager.StealFoodActionActiveSetter(false);
             }
         }
     }

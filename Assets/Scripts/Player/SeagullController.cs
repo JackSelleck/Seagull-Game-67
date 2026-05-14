@@ -29,6 +29,7 @@ namespace Scripts.Player
         private bool _isGrounded = false;
         private bool _isGliding = false;
         private float _glideAccelTimer;
+        private float _gravityAmp = 1f;
 
         private void Awake()
         {
@@ -96,8 +97,11 @@ namespace Scripts.Player
             // Get correct flight values based on current flight mode
             float verticalRot = _isGliding ? _playerStats.glideModeVerticalRot : _playerStats.flapModeVerticalRot;
             float horizontalRot = _isGliding ? _playerStats.glideModeHorizontalRot : _playerStats.flapModeHorizontalRot;
-            float gravity = _forceFlatFlight ? 0 : _isGliding ? _playerStats.glidingModeGravity : _playerStats.flapModeGravity;
+            float gravity = _isGliding ? _playerStats.glidingModeGravity : _playerStats.flapModeGravity;
+            _gravityAmp = _forceFlatFlight ? Mathf.MoveTowards(_gravityAmp, 0f, Time.fixedDeltaTime * 5f) : Mathf.MoveTowards(_gravityAmp, 1f, Time.fixedDeltaTime * 3f); // fade in slowly on exit
+
             float maxBankAngle = _forceFlatFlight ? 25f : _playerStats.maxBankAngle;
+            float moveInputY = PilotControls.enabled ? _moveInput.y : -_moveInput.y;
 
             float moveForce;
             if (_isGliding)
@@ -108,15 +112,17 @@ namespace Scripts.Player
             {
                 _glideAccelTimer = 0f;
                 moveForce = _playerStats.flapModeForce;
-            }            
+            }
 
-            float pitch = _moveInput.y * verticalRot * Time.deltaTime;
+
+
+            float pitch = moveInputY * verticalRot * Time.deltaTime;
             float yaw = _moveInput.x * horizontalRot * Time.deltaTime;
             transform.Rotate(pitch, yaw, 0, Space.Self);
 
             // Movement
             _rb.AddRelativeForce(Vector3.forward * moveForce, ForceMode.Acceleration);
-            _rb.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
+            _rb.AddForce(Vector3.down * (_forceFlatFlight ? 0f : gravity) * _gravityAmp, ForceMode.Acceleration);
             _anim.SetFloat(PlayerAnimHash.Speed, velocity.magnitude);
 
             // Gull z rotation
@@ -168,11 +174,11 @@ namespace Scripts.Player
 
             // smoothly push seagull up so it dosent go too close to the ground
             float dip = _flatFlightMinY - position.y;
-            _rb.AddForce(100f * Mathf.Max(dip, 0f) * Vector3.up, ForceMode.Acceleration);
+            _rb.AddForce(25f * Mathf.Max(dip, 0f) * Vector3.up, ForceMode.Acceleration);
 
             if (_rb.linearVelocity.y < 0f)
             {
-                _rb.linearVelocity = new Vector3(velocity.x, velocity.y * 0.85f, velocity.z);
+                _rb.linearVelocity = new Vector3(velocity.x, velocity.y * 0.80f, velocity.z);
             }
         }
         #endregion

@@ -5,43 +5,61 @@ namespace Scripts.UI
     [DisallowMultipleComponent]
     public class UIManager : MonoBehaviour
     {
-        [SerializeField] private CanvasGroup pauseMenu;
-        [SerializeField] private CanvasGroup HUD;
-        [SerializeField] private CanvasGroup stealFoodAction;
+        [SerializeField] private CanvasGroup _pauseMenu;
+        [SerializeField] private CanvasGroup _HUD;
+        [SerializeField] private CanvasGroup _stealFoodAction;
+        [SerializeField] private CanvasGroup _options;
+        [SerializeField] private CanvasGroup _deathScreen;
 
         /// <summary>
         /// Set UI elements active or inactive
         /// </summary>
-        public void PauseMenuActiveSetter(bool setActive)
+        public void StartMenuActiveSetter(bool setActive)
         {
-            pauseMenu.alpha = setActive? 1 : 0;
+            _pauseMenu.alpha = setActive? 1 : 0;
         }
-        public void HUDActiveSwitch(bool setActive)
+        public void HUDActiveSetter(bool setActive)
         {
-            HUD.alpha = setActive ? 1 : 0;
+            _HUD.alpha = setActive ? 1 : 0;
         }
-        public void StealFoodActionActiveSwitch(bool setActive)
+        public void StealFoodActionActiveSetter(bool setActive)
         {
-            stealFoodAction.alpha = setActive ? 1 : 0;
+            _stealFoodAction.alpha = setActive ? 1 : 0;
         }
+        public void OptionsActiveSetter(bool setActive)
+        {
+            _stealFoodAction.alpha = setActive ? 1 : 0;
+        }
+        public void DeathScreenActiveSetter(bool setActive)
+        {
+            _deathScreen.alpha = setActive ? 1 : 0;
+            _deathScreen.interactable = setActive;
+            _deathScreen.blocksRaycasts = setActive;
+        }
+
 
         /// <summary>
         /// Switch to opposite of current state
         /// </summary>
-        public void PauseMenuActiveSwitch()
+        public void StartMenuActiveSwitch()
         {
-            int activeState = stealFoodAction.alpha.Equals(1) ? 0 : 1;
-            pauseMenu.alpha = activeState;
+            int activeState = _stealFoodAction.alpha.Equals(1) ? 0 : 1;
+            _pauseMenu.alpha = activeState;
         }
         public void HUDActiveSwitch()
         {
-            int activeState = stealFoodAction.alpha.Equals(1) ? 0 : 1;
-            HUD.alpha = activeState;
+            int activeState = _stealFoodAction.alpha.Equals(1) ? 0 : 1;
+            _HUD.alpha = activeState;
         }
         public void StealFoodActionActiveSwitch()
         {
-            int activeState = stealFoodAction.alpha.Equals(1) ? 0 : 1;
-            stealFoodAction.alpha = activeState;
+            int activeState = _stealFoodAction.alpha.Equals(1) ? 0 : 1;
+            _stealFoodAction.alpha = activeState;
+        }
+        public void OptionsActiveSwitch()
+        {
+            int activeState = _stealFoodAction.alpha.Equals(1) ? 0 : 1;
+            _stealFoodAction.alpha = activeState;
         }
     }
 }

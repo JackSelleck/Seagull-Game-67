@@ -1,3 +1,6 @@
+using Scripts.Inputs;
+using Scripts.UI;
+using TMPro;
 using UnityEngine;
 
 namespace Scripts.Player
@@ -5,6 +8,11 @@ namespace Scripts.Player
     [DisallowMultipleComponent]
     public class PlayerHealth : MonoBehaviour
     {
+        [SerializeField] PlayerInputManager _inputs;
+        [SerializeField] UIManager _ui;
+        [SerializeField] SeagullController _controller;
+        [SerializeField] private TextMeshProUGUI _healthText;
+
         private readonly int _maxHealth = 100;
         private int _health;
         public int Health { get => _health; private set => _health = Mathf.Max(0, value); }
@@ -26,7 +34,15 @@ namespace Scripts.Player
 
             int prevHealth = _health;
             Health -= amount;
+            _healthText.text = $"{Health}";
             Debug.Log($"Decreased health from {prevHealth} to {_health}");
+
+            if (_health <= 0)
+            {
+                _inputs.SetUIControls(true);
+                _controller.enabled = false;
+                _ui.DeathScreenActiveSetter(true);
+            }
         }
         public void IncreaseHealth(int amount)
         {

@@ -102217,6 +102217,14 @@ PrefabInstance:
       propertyPath: m_fontStyle
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5655171884835428055, guid: 1c5d0a4e5e7a9bf469a819eae06b8dc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5655171884835428055, guid: 1c5d0a4e5e7a9bf469a819eae06b8dc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SwitchEnabled
+      objectReference: {fileID: 0}
     - target: {fileID: 5696626181643612181, guid: 1c5d0a4e5e7a9bf469a819eae06b8dc4, type: 3}
       propertyPath: m_Name
       value: Canvas

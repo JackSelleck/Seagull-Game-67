@@ -8,6 +8,7 @@ namespace Scripts.Player
     {
         [SerializeField] private UIManager _uiManager;
         [SerializeField] private AnnoyanceManager _annoyanceManager;
+        [SerializeField] private AudioSource _stealSound;
         private bool _canSteal = false;
 
         private void Awake()
@@ -38,6 +39,7 @@ namespace Scripts.Player
                 _canSteal = true;
                 _uiManager.StealFoodActionActiveSetter(true);
                 _annoyanceManager.IncreaseAnnoyance(5);
+                _stealSound.Play();
             }
         }
         private void OnTriggerExit(Collider other)

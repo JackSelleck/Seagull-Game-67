@@ -7,6 +7,7 @@ namespace Scripts.Enemies
     public class BallEnemy : Enemy
     {
         [SerializeField] private Rigidbody _rb;
+        [SerializeField] private AudioSource _audioSource;
         [SerializeField] private List<Transform> _points;
         [SerializeField] private float _speedAmplifier = 5f;
         [SerializeField] private float _arcAmplifier = 2f;
@@ -75,6 +76,7 @@ namespace Scripts.Enemies
         private void NextLocation(int index)
         {
             _time = 0f;
+            _audioSource.Play();
 
             if (index >= _points.Count)
             {

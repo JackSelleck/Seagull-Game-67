@@ -82078,6 +82078,11 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300838, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
+--- !u!1 &1564666742 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1384559278563967047, guid: 1c5d0a4e5e7a9bf469a819eae06b8dc4, type: 3}
+  m_PrefabInstance: {fileID: 4571377697403557727}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1565123795 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100836, guid: c925872ce3bfa384589bf34b953d5a65, type: 3}
@@ -102098,10 +102103,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1384559278563967047, guid: 1c5d0a4e5e7a9bf469a819eae06b8dc4, type: 3}
+      propertyPath: m_Name
+      value: Play
+      objectReference: {fileID: 0}
+    - target: {fileID: 1398072101300112234, guid: 1c5d0a4e5e7a9bf469a819eae06b8dc4, type: 3}
+      propertyPath: m_FirstSelected
+      value: 
+      objectReference: {fileID: 1564666742}
     - target: {fileID: 1638848428271123196, guid: 1c5d0a4e5e7a9bf469a819eae06b8dc4, type: 3}
       propertyPath: _spawnEnemy
       value: 
       objectReference: {fileID: 291584220}
+    - target: {fileID: 3193742601334057065, guid: 1c5d0a4e5e7a9bf469a819eae06b8dc4, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0.0000014305115
+      objectReference: {fileID: 0}
+    - target: {fileID: 3193742601334057065, guid: 1c5d0a4e5e7a9bf469a819eae06b8dc4, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4474640329809034783, guid: 1c5d0a4e5e7a9bf469a819eae06b8dc4, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -102186,6 +102207,16 @@ PrefabInstance:
       propertyPath: _camera
       value: 
       objectReference: {fileID: 1970505541}
+    - target: {fileID: 4792733618095506124, guid: 1c5d0a4e5e7a9bf469a819eae06b8dc4, type: 3}
+      propertyPath: m_text
+      value: 'EXIT
+
+'
+      objectReference: {fileID: 0}
+    - target: {fileID: 4792733618095506124, guid: 1c5d0a4e5e7a9bf469a819eae06b8dc4, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5696626181643612181, guid: 1c5d0a4e5e7a9bf469a819eae06b8dc4, type: 3}
       propertyPath: m_Name
       value: Canvas
@@ -102201,6 +102232,18 @@ PrefabInstance:
     - target: {fileID: 6695476006734354369, guid: 1c5d0a4e5e7a9bf469a819eae06b8dc4, type: 3}
       propertyPath: m_AnchorMin.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8074244860641379486, guid: 1c5d0a4e5e7a9bf469a819eae06b8dc4, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 114.85
+      objectReference: {fileID: 0}
+    - target: {fileID: 8074244860641379486, guid: 1c5d0a4e5e7a9bf469a819eae06b8dc4, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8074244860641379486, guid: 1c5d0a4e5e7a9bf469a819eae06b8dc4, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -343.4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
